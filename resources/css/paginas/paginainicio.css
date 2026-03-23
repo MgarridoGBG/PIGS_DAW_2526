@@ -1,0 +1,35 @@
+/* Imágenes de fondo y ajustes responsivos para la página de inicio.
+ la imagen heroimg se ajusta para mejorar la experiencia móvil.
+ Se añaden imagenes como fondo del elemento a los servicios pues al principio 
+ se diseñaron para llevar texto sobre ellas.
+*/
+
+main {
+    padding: 0;
+}
+
+.heroimg {
+    background-image: url('../../images/hero.jpg');
+}
+
+.servicio1 {
+    background-image: url('../../images/marca.jpg');
+}
+
+.servicio2 {
+    background-image: url('../../images/producto.jpg');
+}
+
+.servicio3 {
+    background-image: url('../../images/editorial.jpg');
+}
+
+.servicio4 {
+    background-image: url('../../images/social.jpg');
+}
+
+@media (max-width: 768px) {
+    .heroimg {
+        background-image: url('../../images/heropeque.jpg');
+    }
+}

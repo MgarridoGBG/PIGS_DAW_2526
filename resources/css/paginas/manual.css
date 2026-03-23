@@ -1,0 +1,163 @@
+/*
+ * manual.css
+ * Estilos específicos para la página del manual de uso.
+ */
+
+/*  Contenedor principal  */
+.manual-pagina {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem 4rem;
+}
+
+
+/*  Cabecera del manual  */
+.manual-header {
+    text-align: center;
+    margin-bottom: 3rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 2px solid var(--color-cuaternario);
+}
+
+.manual-header h1 {
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: var(--color-primario);
+    margin-bottom: 0.5rem;
+    letter-spacing: 0.02em;
+}
+
+.manual-header p {
+    font-size: 1rem;
+    color: var(--color-secundario);
+    max-width: 640px;
+    margin: 0 auto;
+}
+
+.manual-contenedor {
+    display: flex;
+    gap: 2.5rem;
+    flex-direction: column;
+}
+
+/*  Índice */
+.manual-indice {
+    /*position: sticky;*/
+    max-width: 800px;
+    margin:0 auto;
+    top: 80px;
+    background: var(--color-quinario);
+    border: 1px solid var(--color-cuaternario);
+    border-radius: 6px;
+    padding: 1.2rem 5rem;
+    font-size: 0.8rem;
+}
+
+.manual-indice-titulo {
+    font-weight: 800;
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-secundario);
+    margin-bottom: 0.8rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--color-cuaternario);
+}
+
+.manual-indice ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+}
+
+.manual-indice li {
+    line-height: 1.4;
+}
+
+.manual-indice a {
+    color: var(--color-secundario);
+    text-decoration: none;
+    margin-top: 3px;
+}
+
+
+/*  Secciones y subsecciones  */
+section {
+    margin-bottom: 3.5rem;    
+    max-width: 900px;
+    margin: 0 auto;
+    margin-top: 30px;
+    padding: 1.5em 5rem;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.12);
+}
+
+section>h2 {
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: var(--color-primario);
+    border-bottom: 2px solid var(--color-cuaternario);
+    padding-bottom: 0.5rem;
+    margin-bottom: 2.5rem;
+    margin-top: 1rem;
+}
+
+.manual-subseccion {
+    margin-bottom: 2rem;
+    scroll-margin-top: 90px;
+}
+
+.manual-subseccion h3 {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--color-primario);
+    margin-bottom: 0.8rem;
+}
+
+.manual-subseccion h4 {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--color-secundario);
+    margin-bottom: 0.6rem;
+}
+
+/*  Párrafos y listas  */
+
+.manual-lista {
+    list-style-type: none;
+    padding: 0;
+    margin: 0.5rem 0 1rem 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.manual-lista li {
+    font-size: 0.9rem;
+    line-height: 1.6;
+    color: var(--color-primario);
+    padding-left: 1.1rem;
+    position: relative;
+}
+
+/*  Bloque de aviso / IMPORTANTE  */
+.manual-aviso {
+    background: var(--color-resaltado-claro);
+    border-radius: 0 4px 4px 0;
+    padding: 0.9rem 1.1rem;
+    margin: 1rem 0 1.2rem;
+    font-size: 0.85rem;
+    line-height: 1.65;
+    color: var(--color-primario);
+}
+
+.manual-aviso strong {
+    font-size: 0.75rem;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: var(--color-resaltado);
+    margin-bottom: 0.4rem;
+}

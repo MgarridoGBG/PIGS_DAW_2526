@@ -1,0 +1,93 @@
+/* Estilos para la vista pública y privada de fotos y reportajes (imagen principal, metadatos y controles administrativos).
+ Se diseñan para compartir estilos comunes entre la vista pública y privada,
+*/
+
+.cabecera-repor {
+    display: inline-block;
+    margin: 20px 30px 30px;
+    text-align: center;
+    background: var(--color-terciario);
+    color: var(--color-fondo);
+    padding: 6px 30px;
+    border-radius: 8px;
+}
+
+.contenedor-foto-publica {
+    max-width: 2000px;
+    margin: 0 auto;
+    padding: 16px;
+}
+
+.foto-principal {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    margin: 0 auto;
+    margin-bottom: 16px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.foto-meta {
+    margin: 6px 0;
+    font-size: 0.97rem;
+    color: var(--color-texto, #333);
+}
+
+
+.panel-admin {
+    margin: 14px auto;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+}
+
+
+.form-renombrar {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.panel-etiqueta {
+    margin: 10px 0;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+
+.panel-carrito {
+    margin: 14px 0;
+}
+
+.seccion-etiquetas {
+    margin-top: 16px;
+}
+
+.lista-etiquetas-foto {
+    list-style: none;
+    padding: 0;
+    margin: 10px auto 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+}
+
+.lista-etiquetas-foto li {
+    background: var(--color-terciario, #e2e8f0);
+    color: var(--color-fondo, #1a202c);
+    padding: 3px 12px;
+    border-radius: 20px;
+    font-size: 0.88rem;
+}
+
+@media (max-width: 768px) {
+    .contenedor-foto-publica {
+        padding: 3px;
+    }
+
+}

@@ -1,0 +1,49 @@
+/*
+ * estilostailwind.css
+ * -------------------
+ * Componentes y variables Tailwind personalizados para la aplicación.
+ *  - Variables CSS temáticas dentro de '@theme' (colores y tipografía)
+ *  - Componentes Tailwind definidos en '@layer components' con '@apply'
+ * 
+ */
+
+@theme {
+    --color-primario-tailwind: #06151E;
+    --color-secundario-tailwind: #5D6466;
+    --color-terciario-tailwind: #898A8C;
+    --color-cuaternario-tailwind: #CDCBC6;
+    --color-quinario-tailwind: #F1E9E1;
+    --color-fondo-tailwind: #f5f5f5;
+
+    --font-sans: "Manrope", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+@layer components {
+  /* Enlace con subrayado animado y texto en color primario */
+  .tw-enlace-animado {
+    @apply relative underline inline-block text-primario-tailwind hover:text-secundario-tailwind
+    font-bold transition-colors duration-300 after:absolute after:bottom-0 after:left-0
+    after:h-px after:w-0 after:bg-secundario-tailwind after:transition-all after:duration-300
+    hover:after:w-full;
+  }
+
+  /* Variante sin negrita, mismo efecto de subrayado animado */
+  .tw-enlace {
+    @apply relative underline inline-block text-primario-tailwind hover:text-secundario-tailwind
+    transition-colors duration-300 after:absolute after:bottom-0 after:left-0 after:h-px
+    after:w-0 after:bg-secundario-tailwind after:transition-all after:duration-300 hover:after:w-full;
+  }
+
+  /* Iconos sociales con cambio de color en hover */
+  .tw-social-icono {
+    @apply text-primario-tailwind hover:text-secundario-tailwind transition-colors duration-300;
+  }
+
+  /* Etiqueta/enlace sin 'underline' pero con barra inferior animada */
+  .tw-enlace-etiqueta {
+    @apply relative inline-block transition-colors duration-300 after:absolute after:bottom-0 after:left-0
+    after:h-px after:w-0 after:bg-secundario-tailwind after:transition-all after:duration-300
+    hover:after:w-full;
+  }
+
+}

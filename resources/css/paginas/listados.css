@@ -1,0 +1,87 @@
+/* Estilos para vistas de listados/tablas y componentes relacionados (tablas responsivas, acciones, botones).
+ Formateados para adaptarse a diferentes tamaños de pantalla (responsive), haciendo que las tablas grandes sean manejables
+ en pantallas pequeñas, añadiendo scroll horizontal.
+*/
+
+.listado-contenedor {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.listado-contenedor>.tabla-estandar {
+    max-width: 90%;
+}
+
+/* Para tablas muy anchas, se envuelven en un contenedor con scroll horizontal */
+.contenedor-tabla-scroll {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+}
+
+.titular-listado {
+    margin: 20px 0;
+}
+
+.mensaje-cuenta {
+    color: var(--color-secundario);
+    font-size: 0.8em;
+    margin-bottom: 20px;
+}
+
+.form-listado {
+    vertical-align: middle;
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+    justify-content: center;
+    flex-wrap: nowrap;
+}
+
+.acciones-listado {
+    vertical-align: middle;
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+    justify-content: center;
+    flex-wrap: nowrap;
+}
+
+
+.info-carrito {
+    margin-top: 20px;
+    font-size: 1.1em;
+    color: var(--color-primario);
+    margin: 30px 0;
+}
+
+@media (max-width: 1024px) {
+    .listado-contenedor>.tabla-estandar {
+        max-width: 95%;
+    }
+
+    .btn-estandar,
+    .btn-borrar,
+    .btn-carrito {
+        padding: 1px 1px;
+    }
+}
+
+@media (max-width: 768px) {
+    .listado-contenedor>.tabla-estandar {
+        width: 100%;
+        font-size: 0.8em;
+    }
+
+
+    .btn-estandar,
+    .btn-borrar,
+    .btn-carrito {
+        font-size: 0.7em;
+        padding: 1px 1px;
+    }
+}

@@ -1,0 +1,56 @@
+/* Estilos específicos para las vistas de confirmación para acciones
+sobre archivos y carpetas físicos (crear, borrar, renombrar).
+*/
+
+.pagina-confirmacion {
+    max-width: 560px;
+    margin: 40px auto;
+    background: var(--color-fondo);
+    padding: 32px 40px;
+    border-radius: 8px;
+    border: 1px solid var(--color-cuaternario);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+}
+
+.pagina-confirmacion h2 {
+    margin-top: 0;
+    margin-bottom: 24px;
+}
+
+.opciones-confirmacion {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 8px;
+}
+
+.opciones-confirmacion div:first-child {
+    margin: 0 auto;
+}
+
+.opciones-confirmacion div:first-child form {
+    display: inline;
+    margin-top: 5px;
+}
+
+
+.opciones-confirmacion div:first-child form button {
+    display: inline;
+    margin-top: 10px;
+}
+
+.pagina-confirmacion > p > a {
+    font-size: 0.85rem;
+    color: var(--color-secundario);
+}
+
+.fotos-encontradas, .info-adicional {
+    font-size: 0.85rem;
+    margin: 20px;
+}
+
+.enlace_confirmaciones {
+    text-align: center;
+    margin-top: 10px;
+}
+

@@ -1,0 +1,48 @@
+/*Raíz de estilos de la aplicación. Importa estilos parciales y define variables CSS globales y reglas transversales.
+ - Actúa como punto de ensamblado: contiene '@import' de hojas parciales y define ':root' con las variables de color.
+ - Importa '@import' tailwindcss y  Archivos parciales. 
+*/
+
+@import 'tailwindcss';
+
+@import './elementoscomunes.css';
+@import './estilostailwind.css';
+@import './paginas/formularios.css';
+
+
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+@source '../**/*.blade.php';
+@source '../**/*.js';
+
+/*
+ Para depuración visual de los elementos
+* { border-style: solid;
+    border-width: 1px;}
+*/
+
+/* Estilos transversales para la aplicación */
+:root {
+    --color-primario: #06151E;
+    --color-secundario: #5D6466;
+    --color-terciario: #898A8C;
+    --color-cuaternario: #CDCBC6;
+    --color-quinario: #F1E9E1;
+    --color-fondo: #f5f5f5;   
+    --color-resaltado: #c0392b;
+    --color-resaltado-claro: #fdecea;
+    --color-verde: #3aa03f;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    font-family: "Manrope", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    color: var(--color-primario);
+    background: var(--color-fondo);
+}
+
+.prueba {
+    background: red;
+}

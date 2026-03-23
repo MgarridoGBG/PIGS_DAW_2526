@@ -1,0 +1,43 @@
+/* Estilos para las páginas de estado (error y éxito) mostradas al usuario.
+ Ubicación: resources/css/paginas/errores.css
+*/
+
+.pagina-error {
+    max-width: 560px;
+    margin: 60px auto;
+    padding: 40px;
+    background: var(--color-fondo);
+    border: 1px solid var(--color-cuaternario);
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.12);
+    text-align: center;
+}
+
+.pagina-error-icono {
+    margin: 0 auto;
+    height: 70px;
+    width: auto;
+    margin-bottom: 16px;
+}
+
+.pagina-error-titulo {    
+    font-size: 1.6rem;
+    font-weight: 800;
+    margin: 0 0 16px;
+}
+
+.titulo-rojo { 
+    color: var(--color-resaltado);
+}
+
+.titulo-verde { 
+    color: var(--color-verde);
+}
+
+.pagina-error-mensaje {
+    font-size: 0.95rem;
+    color: var(--color-secundario);
+    margin-bottom: 28px;
+    line-height: 1.6;
+}
+

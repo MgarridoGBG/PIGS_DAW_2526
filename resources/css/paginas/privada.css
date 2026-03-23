@@ -1,0 +1,317 @@
+/* Estilos de la zona privada (dashboard/área personal) usados en 'privada.blade.php'.
+ cubre tanto los estilos especificos del rol Cliente como los del rol Admin y Empleado,
+ ya que comparten la misma vista y elementos comunes.
+*/
+
+
+/* Contenedor principal de la zona privada */
+.centrado {
+    margin: 0 auto;
+}
+
+.privada-contenedor {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 24px 20px 48px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+/* Bloque de bienvenida comun */
+.privada-bienvenida {
+    padding: 16px 24px;
+}
+
+.privada-bienvenida p {
+    margin: 4px 0;
+}
+
+.privada-panel-titulo {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--color-secundario);
+    border-bottom: 2px solid var(--color-cuaternario);
+    border-top: 2px solid var(--color-cuaternario);
+    padding-bottom: 8px;
+    padding-top: 8px;
+    margin: 0;
+}
+
+
+/* Estilos para los datos del user*/
+.dash-datos {
+    background: var(--color-terciario);
+    color: var(--color-fondo);
+    margin: 0 auto;
+    margin-top: 20px;
+    padding: 6px 10px;
+    border-radius: 8px;
+    text-align: center;
+    width: 60%;
+}
+
+.contenedor-datos {
+    width: 60%;
+    margin: 0 auto;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+    border-radius: 8px;
+    padding: 16px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 10px;
+    margin-bottom: 20px;
+    padding: 20px;
+}
+
+.separador-lista {
+    height: 1px;
+    background-color: var(--color-cuaternario);
+    margin: 6px 15px;
+}
+
+.contenedor-datos ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.contenedor-datos a {
+    width: 120px;
+    margin: 0 auto;
+    margin-top: 10px;
+}
+
+.contenedor-datos>.btn-estandar {
+    margin-bottom: 20px;
+    ;
+}
+
+/* Estilos para el aviso de borrado de la cuenta */
+.aviso-eliminar {
+    width: 60%;
+    margin: 0 auto;
+    margin-bottom: 20px;
+    background-color: var(--color-resaltado);
+    padding: 10px;
+    padding-top: 15px;
+    color: var(--color-fondo);
+    border-radius: 8px;
+}
+
+.aviso-eliminar img {
+    height: 50px;
+    margin: 0 auto;
+}
+
+.aviso-eliminar h3 {
+    margin-top: 10px;
+    font-size: 1.2rem;
+    font-weight: 700;
+    text-align: center;
+}
+
+.aviso-eliminar p {
+    font-size: 0.9rem;
+    text-align: center;
+}
+
+.formulario-eliminar {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 50%;
+    margin: 0 auto;
+    margin-top: 20px;
+    font-weight: 900;
+}
+
+.formulario-eliminar label {
+    cursor: pointer;
+    font-size: 0.9em;
+    margin-bottom: 5px;
+}
+
+.formulario-eliminar button {
+    border-radius: 4px;
+    border: 1px solid var(--color-terciario);
+    cursor: pointer;
+    font-size: 0.78rem;
+    transition: background 150ms;
+    display: inline-block;
+    padding: 2px 8px 2px 8px;
+    background-color: var(--color-fondo);
+    color: var(--color-primario);
+    margin-top: 10px;
+}
+
+
+/* Estilos para los dashborads y desplegables */
+.contenedor-dash-desplegable {
+    width: 100%;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+    border-radius: 8px;
+    margin-top: 10px;
+    margin-bottom: 20px;
+    padding: 20px;
+
+}
+
+.tabla-estandar {
+    width: 100%;
+    margin: 0 auto;
+    border-collapse: separate;
+    border-spacing: 0;
+    border-radius: 8px;
+}
+
+.tabla-estandar thead tr:first-child th:first-child {
+    border-top-left-radius: 8px;
+}
+
+.tabla-estandar thead tr:first-child th:last-child {
+    border-top-right-radius: 8px;
+}
+
+.dash-pulsador-desplegar {
+    cursor: pointer;
+    user-select: none;
+    display: flex;
+    align-items: center;
+    align-content: center;
+}
+
+.dash-pulsador-desplegar img {
+    height: 10px;
+    justify-self: start;
+}
+
+.dash-pulsador-desplegar h3 {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.botonera-tabla {
+    width: fit-content;
+    white-space: nowrap;
+}
+
+.dash-pulsador-desplegar {
+    background: var(--color-terciario);
+    color: var(--color-fondo);
+    margin-bottom: 1px;
+    margin-top: 1px;
+    padding: 6px 10px;
+    border-radius: 8px;
+    transition: background 150ms;
+}
+
+.dash-pulsador-desplegar:hover {
+    background: var(--color-secundario);
+    border-color: var(--color-secundario);
+}
+
+
+/* Estilos adicionales */
+.privada-info, .privada-info-gris {
+    width: 90%;
+    margin: 0 auto;
+    margin-bottom: 20px;
+    font-size: 0.95em;
+}
+
+.privada-info-gris {
+    color: var(--color-secundario);
+    font-size: 0.9em;
+}
+
+.checkbox-contenedor {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+
+}
+
+.checkbox-contenedor input {
+    margin: 0;
+}
+
+.lista-etiquetas {
+    font-size: 0.9em;
+    border-radius: 8px;
+    border-style: solid;
+    border-width: 1px;
+    border-color: var(--color-cuaternario);
+    overflow: hidden;
+    width: 95%;
+    padding: 15px;
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+}
+
+.lista-etiquetas li:nth-child(odd) {
+    color: var(--color-primario);
+}
+
+.lista-etiquetas li:nth-child(even) {
+    color: var(--color-terciario);
+}
+
+.botonera-formulario {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.titulo-mantenimiento {
+    font-weight: 700;
+    padding-bottom: 8px;
+    margin-top: 0;
+}
+
+.seccion-mantenimiento .separador-lista {
+    margin: 15px 15px;
+}
+
+.seccion-mantenimiento form {
+    margin-top: 15px;
+}
+
+@media (max-width: 1024px) {
+    .contenedor-tabla-dash {
+        width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .privada-info {
+        width: 100%;
+    }
+
+    .dash-datos,
+    .contenedor-datos,
+    .aviso-eliminar {
+        width: 100%;
+    }
+
+    .privada-contenedor {
+        padding: 16px 2px 32px;
+    }
+}
+
+
+@media (max-width: 768px) {
+    .formulario-eliminar {
+        width: 95%;
+    }
+}

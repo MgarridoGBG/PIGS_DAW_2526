@@ -1,0 +1,130 @@
+/*
+ * Hoja de estilos con las reglas reutilizables y clases comunes a toda la aplicación.
+ * Centraliza estilos pequeños y componentes UI (botones, tablas,
+ * entradas, paginación, redirecciones) que se usan en varias vistas.
+ */
+
+ /* titulares */
+h2 {
+    font-size: 1.2rem;
+    font-weight: 800;
+}
+
+h3 {
+    font-weight: 600;
+}
+
+/* Botones y enlaces */
+button, .btn-estandar, .btn-deshabilitado, .btn-carrito {
+    border-radius: 4px;
+    border: 1px solid var(--color-terciario);
+    cursor: pointer;
+    font-size: 0.78rem;
+    transition: background 150ms;
+}
+
+button {
+    padding: 3px 8px;
+}
+
+.btn-estandar, .btn-deshabilitado, .btn-borrar {
+    display: inline-block;
+    padding: 2px 8px 2px 8px;
+}
+
+ .btn-carrito {
+    padding: 8px 10px;
+}
+
+button:hover, .btn-estandar:hover {
+    background: var(--color-quinario);
+}
+
+.btn-borrar {
+    color: var(--color-resaltado);
+    border-color: var(--color-resaltado);
+}
+
+.btn-borrar:hover {
+    background: var(--color-resaltado-claro);
+}
+
+.btn-carrito {
+    background-color: var(--color-primario);
+    color: var(--color-fondo);
+    border-color: var(--color-primario);
+}
+
+.btn-carrito:hover {
+    background-color: var(--color-secundario);
+    color: var(--color-fondo);
+    border-color: var(--color-primario);
+}
+
+.btn-deshabilitado {
+    background-color: var(--color-cuaternario);
+    color: var(--color-fondo);
+    border-color: var(--color-cuaternario);
+}
+
+.redirector-publi-priv {
+    display: flex;
+	gap: 8px;
+	justify-content: center;
+	align-items: center;
+	margin: 30px 0;
+	flex-wrap: wrap;
+}
+
+/* Contenedor de botones de paginación */
+.paginacion {
+	display: flex;
+	gap: 8px;
+	justify-content: center;
+	align-items: center;
+	margin: 30px 0;
+	flex-wrap: wrap;
+}
+
+/* Información de la página */
+.info-pagina {
+	color: var(--color-secundario);
+	font-size: 0.7rem;
+	margin-left: 8px;
+}
+
+/* Tablas y listas */
+.tabla-estandar {
+    border-collapse: collapse;
+    font-size: 0.9em;
+    min-width: 900px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+    border-radius: 8px;
+    width: 100%;
+}
+
+.tabla-estandar thead tr {
+    background-color: var(--color-terciario);
+    color: var(--color-fondo);
+    text-align: center;
+    vertical-align: middle;
+    font-weight: bold;
+}
+
+.tabla-estandar th,
+.tabla-estandar td {
+    padding: 8px 15px;
+}
+
+
+.tabla-estandar tbody tr {
+    border-bottom: 1px solid var(--color-quinario);
+}
+
+
+/* botones pequeños en vista móvil */
+@media (max-width: 768px) {
+	.btn-estandar, .btn-deshabilitado, .btn-borrar {
+        padding: 4px 8px;
+    }
+}

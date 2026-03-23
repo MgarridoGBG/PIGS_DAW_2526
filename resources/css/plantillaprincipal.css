@@ -1,0 +1,210 @@
+/*
+ * plantillaprincipal.css
+ * Estilos base y plantilla principal para la aplicación web.
+ * Contiene reglas de reset básico, estilos del header (logo, navegación,
+ * carrito), comportamiento responsive (menú hamburguesa) y estilos de
+ * estructura principal (main, footer).
+ */
+
+/*  Reset básico sirve para normalizar márgenes y paddings  */
+*,
+*::before,
+*::after {
+    /*margin: 0;
+    padding: 0;*/
+    box-sizing: border-box;
+}
+
+
+/*  Header  */
+
+.separador-secciones {
+    height: 1px;
+    background: var(--color-cuaternario);
+    margin: 5px;
+}
+
+.contenedor-header {
+    background: var(--color-fondo);
+    position: sticky;
+    top: 0px;
+    z-index: 10000;
+    padding: .1% 0 .1% 0;
+}
+
+.header-dentro {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 2rem;
+    background: var(--color-fondo);
+    color: var(--color-primario);
+}
+
+/* Logo */
+.header_logo a img {
+    width: 70px;
+    height: auto;
+}
+
+/*  Navegación (escritorio)  */
+.navegacion_lista {
+    display: flex;
+    list-style: none;
+    gap: 1.5rem;
+    align-items: center;
+}
+
+.navegacion_link {
+    color: var(--color-primario);
+    text-decoration: none;
+    font-size: 1rem;
+    font-weight: 700;
+    padding: 0.4rem 0.6rem;
+    border-radius: 4px;
+    transition: background 0.3s, color 0.3s;
+}
+
+.navegacion_link:hover {
+    background: var(--color-terciario);
+    color: var(--color-fondo);
+}
+
+.carro-svg {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.carro-svg img {
+    width: 30px;
+    margin: 0 10px 0 10px;
+}
+
+.carro-enlace:hover { 
+    background-color: var(--color-cuaternario);
+}
+
+.carro-texto {
+    display: none;
+    /* Oculto por defecto, es para vista móvil */
+}
+
+/*  Botón hamburguesa (oculto en escritorio)  */
+.header_hamburguesa {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+    z-index: 10;
+}
+
+.linea_hamburguesa {
+    display: block;
+    width: 28px;
+    height: 3px;
+    background: var(--color-primario);
+    border-radius: 3px;
+    transition: transform 0.3s, opacity 0.3s;
+}
+
+/* Animación de la X al abrir el menu hamburguesa */
+.header_hamburguesa.active .linea_hamburguesa:nth-child(1) {
+    transform: translateY(8px) rotate(45deg);
+}
+
+.header_hamburguesa.active .linea_hamburguesa:nth-child(2) {
+    opacity: 0;
+}
+
+.header_hamburguesa.active .linea_hamburguesa:nth-child(3) {
+    transform: translateY(-8px) rotate(-45deg);
+}
+
+/*  Main  */
+main {
+    padding: 0 2rem;
+    text-align: center;
+}
+
+main h1 {
+    margin-bottom: 0.5rem;
+}
+
+
+footer {
+    background-color: var(--color-fondo);
+    text-align: center;
+    padding: 10px;
+    bottom: 0;
+    width: 100%;
+}
+
+/* RESPONSIVE — Menú hamburguesa por debajo de 768px */
+@media (max-width: 768px) {
+
+    /* Mostrar botón hamburguesa */
+    .header_hamburguesa {
+        display: flex;
+    }
+
+    /* Nav se convierte en panel desplegable */
+    .navegacion_header {
+        position: absolute;
+        top: 90px;
+        /* justo debajo del header */
+        left: 50%;
+        width: 50%;
+        background: var(--color-cuaternario);
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.4s ease;
+    }
+
+    /* Estado abierto */
+    .navegacion_header.open {
+        max-height: 400px;
+        /* suficiente para los enlaces */
+    }
+
+    /* Lista en columna */
+    .navegacion_lista {
+        flex-direction: column;
+        gap: 0;
+        padding: 0.5rem 0;
+        display: inline;
+    }
+
+    .navegacion_item {
+        border-bottom: 1px solid var(--color-fondo);
+    }
+
+    .navegacion_item:last-child {
+        border-bottom: none;
+    }
+
+    .navegacion_link {
+        display: block;
+        padding: 0.9rem 2rem;
+        border-radius: 0;
+        width: 100%;
+    }
+
+    .navegacion_link:hover {
+        background: var(--color-terciario);
+        color: var(--color-fondo);
+    }
+
+    .carro-enlace {  
+        display: none; /* Oculto en vista móvil */
+    }
+
+    .carro-texto {
+        display: block;
+        /* Visible en vista móvil */
+    }
+}

@@ -1,0 +1,107 @@
+/* Estilos específicos para la galería pública, que se cargan solo en esa vista
+y que no incluyen las galerías de fotos privadas*/
+
+#tabla-desplegable {
+    border-radius: 0 0 8px 8px;
+}
+
+#contenedor-principal-galeria {
+    max-width: 900px;
+    margin-top: 10px;
+     margin: 0 auto;   
+}
+
+#tabla-desplegable {
+    width: 100%;
+    margin: 0;
+}
+
+#despliega-tabla-colecciones, #despliega-nube-etiquetas {
+    cursor: pointer;
+    user-select: none;
+    display: flex;
+    align-items: center;
+    align-content: center;
+}
+
+#despliega-tabla-colecciones img, #despliega-nube-etiquetas img {
+    height: 10px;
+    justify-self: start;    
+}
+
+#despliega-tabla-colecciones h3, #despliega-nube-etiquetas h3 {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.botonera-tabla {
+    width: fit-content;
+    white-space: nowrap;
+}
+
+#despliega-tabla-colecciones, #despliega-nube-etiquetas {
+    background: var(--color-terciario);
+    color: var(--color-fondo);
+    margin-bottom: 1px;
+    margin-top: 20px;
+    padding: 6px 10px;
+    border-radius: 8px;
+    transition: background 150ms;
+}
+
+#despliega-tabla-colecciones:hover, #despliega-nube-etiquetas:hover {
+    background: var(--color-secundario);
+    border-color: var(--color-secundario);
+}
+
+#campo-busqueda-etiqueta {
+    margin: 20px 10px 10px 10px;
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+}
+
+#campo-busqueda-etiqueta input {
+    width: 200px;
+    padding: 4px 8px;
+    border: 1px solid var(--color-terciario);
+    border-radius: 4px;
+    font-size: 0.9rem;
+}
+
+#campo-busqueda-etiqueta form {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+#lista-etiquetas {
+
+    font-size: 0.9em;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+    border-radius: 8px;
+    overflow: hidden;
+    width: 100%;
+
+    padding: 10px;
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;}
+
+#lista-etiquetas li:nth-child(odd) {
+  color: var(--color-primario); /* Color para las filas impares */
+}
+#lista-etiquetas li:nth-child(even) {
+  color: var(--color-terciario); /* Color para las filas pares */
+}
+
+/* Para que la tabla de colecciones públicas se vea bien en móviles con su scroll horizontal */
+@media (max-width: 1024px) {
+    #tabla-colecciones-publicas {
+        width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+}

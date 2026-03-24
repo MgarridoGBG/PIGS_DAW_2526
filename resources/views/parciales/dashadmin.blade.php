@@ -13,7 +13,7 @@
     <div class="contenedor-dash-desplegable">
 
         <div class="botonera-formulario">
-            <p><a class="btn-estandar" href="{{ route('listarusuarios') }}" target="_blank" rel="noopener noreferrer">Ver todos los usuarios</a></p>
+            <p><a class="btn-estandar" href="{{ route('listarusuarios') }}" rel="noopener noreferrer">Ver todos los usuarios</a></p>
             <p> <a class="btn-estandar" href="{{ route('formnuevousuario') }}">Nuevo usuario</a></p>
         </div>
 
@@ -70,7 +70,7 @@
 
     <div class="contenedor-dash-desplegable">
         <div class="botonera-formulario">
-            <p><a class="btn-estandar" href="{{ route('listarformatos') }}" target="_blank" rel="noopener noreferrer">Ver todos los formatos</a></p>
+            <p><a class="btn-estandar" href="{{ route('listarformatos') }}" rel="noopener noreferrer">Ver todos los formatos</a></p>
             <p><a class="btn-estandar" href="{{ route('formnuevoformato') }}">Nuevo formato</a></p>
         </div>
 
@@ -108,7 +108,7 @@
 
     <div class="contenedor-dash-desplegable">
         <div class="botonera-formulario">
-            <p><a class="btn-estandar" href="{{ route('listarsoportes') }}" target="_blank" rel="noopener noreferrer">ver todos</a></p>
+            <p><a class="btn-estandar" href="{{ route('listarsoportes') }}" rel="noopener noreferrer">ver todos</a></p>
             <p><a class="btn-estandar" href="{{ route('formnuevosoporte') }}">Nuevo soporte</a></p>
         </div>
         <div class="formulario-estandar" id="buscar_soportes">
@@ -156,9 +156,9 @@
         <div class="sección-mantenimiento">
             <h4 class="titulo-mantenimiento">Buscar Clientes Fantasma</h4>
             <p class="privada-info-gris">Busca clientes que no han realizado pedidos, no tienen reportajes registrados ni cita agendada.</p>
-            <form target="_blank" action="{{ route('filtrarclientesfantasma') }}" method="POST">
+            <form action="{{ route('filtrarclientesfantasma') }}" method="POST">
                 @csrf
-                <button type="submit" class="btn-estandar" onclick="return confirm('Esta operación puede llevar un rato\n¿Continuar?')">Buscar</button>
+                <button type="submit" class="btn-estandar">Buscar</button>
             </form>
         </div>
 
@@ -189,9 +189,9 @@
         <div class="sección-mantenimiento">
             <h4 class="titulo-mantenimiento">Buscar Pedidos Fantasma</h4>
             <p class="privada-info-gris">Localiza pedidos vacíos (sin items) en la base de datos.</p>
-            <form target="_blank" action="{{ route('filtrarpedidosfantasma') }}" method="POST">
+            <form action="{{ route('filtrarpedidosfantasma') }}" method="POST">
                 @csrf
-                <button type="submit" class="btn-estandar" onclick="return confirm('Esta operación puede llevar un rato\n¿Continuar?')">Buscar</button>
+                <button type="submit" class="btn-estandar">Buscar</button>
             </form>
         </div>
     </div>

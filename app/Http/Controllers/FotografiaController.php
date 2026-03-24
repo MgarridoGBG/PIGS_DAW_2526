@@ -607,8 +607,13 @@ class FotografiaController extends Controller
      *
      * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
      */
-    public function buscarFotosFantasma()
+    public function buscarFotosFantasma(Request $request)
     {
+        // Petición normal (no Ajax): mostrar la página con el spinner; el contenido se carga vía AJAX
+        if (!$request->ajax()) {
+            return view('parciales.listados.listarfotografiasfantasma');
+        }
+        // Petición AJAX: realizar la búsqueda y devolver solo vista tabla con los resultados.
         $rutaBase = storage_path('app/private/fotosreportajes');
 
         // Obtener todos los reportajes de la BD
@@ -637,8 +642,7 @@ class FotografiaController extends Controller
             ['path' => LengthAwarePaginator::resolveCurrentPath()]
         );
 
-
         $mensaje = $total > 0 ? "Fotos fantasma encontradas: {$total}" : "No se han encontrado fotos fantasma.";
-        return view('parciales.listados.listarfotografiasfantasma', compact('fotografias', 'mensaje'));
+        return view('parciales.listados.tablafotosfantasma', compact('fotografias', 'mensaje'));
     }
 }

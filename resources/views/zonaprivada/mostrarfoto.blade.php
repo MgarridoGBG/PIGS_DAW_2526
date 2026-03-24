@@ -39,7 +39,7 @@
 @endif
 @if(Auth::user()->privilegios()->where('nombre_priv', 'hacer_pedido')->exists())
 <div class="panel-carrito">
-<form method="POST" action="{{ route('mostrarformcarrito', $foto->id) }}" style="display:inline;" target="_blank">
+<form method="POST" action="{{ route('mostrarformcarrito', $foto->id) }}" style="display:inline;"  target="_blank" rel="noopener noreferrer">
     @csrf
     <button type="submit" class="btn-carrito">Añadir al carrito</button>
 </form>

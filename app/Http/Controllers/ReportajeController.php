@@ -511,12 +511,19 @@ class ReportajeController extends Controller
 
     /**
      * Busca reportajes que no tienen carpeta asociada en storage
-     * (reportajes "fantasma") y devuelve una lista paginada.
+     * (reportajes "fantasma") y devuelve una lista paginada.     *
+     * En petición normal devuelve la vista con spinner.
+     * En petición AJAX realiza el procesamiento lento y devuelve la vista parcial con los datos.
      *
      * @return \Illuminate\View\View
      */
-    public function buscarReportajesFantasma()
+    public function buscarReportajesFantasma(Request $request)
     {
+        // Petición es normal (no es Ajax): mostrar la página con el spinner; el contenido se carga vía AJAX
+        if (!$request->ajax()) {
+            return view('parciales.listados.listarreporfantasma');
+        }
+        //Si la peticion no es normal (es petición AJAX), devolver la vista parcial con los datos
         $rutaBase = storage_path('app/private/fotosreportajes');
 
         // Obtener todos los reportajes de la BD
@@ -543,8 +550,8 @@ class ReportajeController extends Controller
             ['path' => LengthAwarePaginator::resolveCurrentPath()]
         );
 
-        // Mostrar mensaje con el número de reportajes fantasma encontrados y devolver la vista con la lista paginada
+        // Mostrar mensaje con el número de reportajes fantasma encontrados y devolver la vista parcial
         $mensaje = $total > 0 ? "Reportajes fantasma encontrados: {$total}" : "No se han encontrado reportajes fantasma.";
-        return view('parciales.listados.listarreportajes', compact('reportajes', 'mensaje'));
+        return view('parciales.listados.tablareporfantasma', compact('reportajes', 'mensaje'));
     }
 }

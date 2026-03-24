@@ -34,7 +34,7 @@
 
     <div class="contenedor-dash-desplegable">
         <div class="botonera-formulario">
-            <a href="{{ route('listarreportajes') }}" target="_blank" rel="noopener noreferrer" class="btn-estandar">Ver todos los reportajes</a>
+            <a href="{{ route('listarreportajes') }}" class="btn-estandar">Ver todos los reportajes</a>
             <a href="{{ route('formnuevoreportaje') }}" class="btn-estandar">Nuevo reportaje</a>
         </div>
 
@@ -135,7 +135,7 @@
     </div>
     <div class="contenedor-dash-desplegable">
         <div>
-            <p><a class="btn-estandar" href="{{ route('listarpedidos') }}" target="_blank" rel="noopener noreferrer">Ver todos los pedidos</a></p>
+            <p><a class="btn-estandar" href="{{ route('listarpedidos') }}" >Ver todos los pedidos</a></p>
             <br>
             <p class="privada-info"><strong>Para crear un nuevo pedido para un cliente:<br>Añada items a través del carrito y una vez registrado el pedido asigne el nuevo cliente.</strong></p>
         </div>
@@ -181,7 +181,7 @@
     </div>
     <div class="contenedor-dash-desplegable">
         <div>
-            <p><a class="btn-estandar" href="{{ route('listarcitas') }}" target="_blank" rel="noopener noreferrer">ver todos</a></p>
+            <p><a class="btn-estandar" href="{{ route('listarcitas') }}" >ver todas</a></p>
             <br>
             <p class="privada-info"><strong>Para crear una nueva cita como admin:<br>Utilice el calendario y luego asigne el cliente.</strong></p>
         </div>

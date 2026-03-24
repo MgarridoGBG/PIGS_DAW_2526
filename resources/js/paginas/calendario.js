@@ -2,7 +2,7 @@ import { Calendar } from '@fullcalendar/core'
 import dayGridPlugin from '@fullcalendar/daygrid' 
 import interactionPlugin from '@fullcalendar/interaction'
 
-// He instalado esta api FullCalendar y sus plugins necesarios para mostrar el calendarioy gestionar citas por el usuario cliente.
+// He instalado esta api, FullCalendar, y sus plugins necesarios para mostrar el calendario y gestionar citas por el usuario cliente.
 // (npm install @fullcalendar/core @fullcalendar/daygrid @fullcalendar/interaction)
 // Este script se encarga de cargar las citas desde el backend, mostrar la disponibilidad en el calendario,
 // y permitir al usuario reservar, modificar o cancelar su propia cita.

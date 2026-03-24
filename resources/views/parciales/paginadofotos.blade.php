@@ -10,7 +10,7 @@
      @foreach($fotografias as $foto)
      <li class="galeria-item">
 
-         <a href="{{ route('mostrarfoto', $foto->id) }}" target="_blank">
+         <a href="{{ route('mostrarfoto', $foto->id) }}" target="_blank" rel="noopener noreferrer">
              <img aria-label="Miniatura de {{ $foto->nombre_foto }}" src="{{ route('fotostorage', $foto->reportaje->codigo . '/thumbs/' . $foto->nombre_foto) }}"
                  alt="{{ $foto->nombre }}">
              <span class="galeria-info">{{ $foto->nombre_foto }}
@@ -34,7 +34,7 @@
          @endif
          @if(Auth::user()->privilegios()->where('nombre_priv', 'hacer_pedido')->exists())
          <div class="galeria-acciones">
-             <form method="POST" action="{{ route('mostrarformcarrito', $foto->id) }}" style="display:inline;" target="_blank">
+             <form method="POST" action="{{ route('mostrarformcarrito', $foto->id) }}" style="display:inline;" target="_blank" rel="noopener noreferrer">
                  @csrf
                  <button class="btn-carrito" type="submit">Añadir al carrito</button>
              </form>

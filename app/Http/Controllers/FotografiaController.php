@@ -586,7 +586,7 @@ class FotografiaController extends Controller
         // Si la petición es AJAX, devolver solo la vista de la galería para actualizar dinámicamente
         // (Esto es para que el filtro por etiqueta funcione sin recargar toda la página)
         if ($peticion->ajax()) {
-            return view('parciales.galeriafotospublicas', ['fotografias' => $fotografias]);
+            return view('parciales.paginadofotospublicas', ['fotografias' => $fotografias]);
         }
 
         $nombresEtiquetas = \App\Models\Etiqueta::pluck('nombre_etiqueta')->toArray();

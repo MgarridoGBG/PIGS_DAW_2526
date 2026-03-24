@@ -57,6 +57,12 @@
         </select>
 
 
+        <label for="marcado_eliminar">Marcado para eliminar</label>
+        <input type="hidden" name="marcado_eliminar" value="0">
+        <input type="checkbox" id="marcado_eliminar" name="marcado_eliminar" value="1"
+            {{ old('marcado_eliminar', $usuario->marcado_eliminar ?? false) ? 'checked' : '' }}>
+
+
         <input class="btn-estandar" type="submit" value="Editar usuario">
         <a class="btn-estandar" href="{{ url()->previous() }}">Cancelar</a>
 

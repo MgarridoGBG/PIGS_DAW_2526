@@ -1,26 +1,26 @@
 <?php
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\formatoController;
+use App\Http\Controllers\FormatoController;
 
 // GESTION DE FORMATOS DE IMAGEN
 // Rutas para listar, editar, crear y borrar formatos de imagen, solo accesible para roles con privilegio 'admin_avanzado'
-Route::get('/listarformatos', [formatoController::class, 'listarFormatos'])
+Route::get('/listarformatos', [FormatoController::class, 'listarFormatos'])
     ->name('listarformatos')->middleware('chequeaprivilegio:admin_avanzado');
 
-Route::get('/formeditarformato/{id}', [formatoController::class, 'mostrarFormEditarFormato'])
+Route::get('/formeditarformato/{id}', [FormatoController::class, 'mostrarFormEditarFormato'])
     ->name('formeditarformato')->middleware('chequeaprivilegio:admin_avanzado');
 
-Route::put('/editarformato/{id}', [formatoController::class, 'procesarFormEditarFormato'])
+Route::put('/editarformato/{id}', [FormatoController::class, 'procesarFormEditarFormato'])
     ->name('editarformato')->middleware('chequeaprivilegio:admin_avanzado');
 
-Route::delete('/borrarformato/{id}', [formatoController::class, 'borrarFormato'])
+Route::delete('/borrarformato/{id}', [FormatoController::class, 'borrarFormato'])
     ->name('borrarformato')->middleware('chequeaprivilegio:admin_avanzado');
 
-Route::match(['get', 'post'], '/filtrarformatos', [formatoController::class, 'filtrarFormatos'])
+Route::match(['get', 'post'], '/filtrarformatos', [FormatoController::class, 'filtrarFormatos'])
     ->name('filtrarformatos')->middleware('chequeaprivilegio:admin_avanzado');
 
-Route::get('/nuevoformato', [formatoController::class, 'mostrarFormNuevoFormato'])
+Route::get('/nuevoformato', [FormatoController::class, 'mostrarFormNuevoFormato'])
     ->name('formnuevoformato')->middleware('chequeaprivilegio:admin_avanzado');
 
-Route::post('/nuevoformato', [formatoController::class, 'registrarNuevoFormato'])
+Route::post('/nuevoformato', [FormatoController::class, 'registrarNuevoFormato'])
     ->name('nuevoformato')->middleware('chequeaprivilegio:admin_avanzado');

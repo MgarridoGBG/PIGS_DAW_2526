@@ -273,6 +273,10 @@ class UserController extends Controller
                 }
             }
 
+            if ($peticion->has('marcado_eliminar')) {
+                $usuario->marcado_eliminar = (bool) $peticion->input('marcado_eliminar');
+            }
+
             // Guardar los cambios y devolver la vista que corresponda
             $guardado = $usuario->save();
 

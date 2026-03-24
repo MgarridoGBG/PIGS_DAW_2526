@@ -29,6 +29,7 @@
                     <th>Apellidos</th>
                     <th>DNI</th>
                     <th>Role</th>
+                    <th>Marcado eliminar</th>
                     <th>Acciones</th>
                 </tr>
             </thead>
@@ -41,6 +42,7 @@
                     <td>{{ $usuario->apellidos }}</td>
                     <td>{{ $usuario->dni }}</td>
                     <td>{{ $usuario->role->nombre_role ?? 'Sin role' }}</td>
+                    <td>{{ $usuario->marcado_eliminar ? 'Sí' : 'No' }}</td>
                     <td class="acciones-listado">
                         <a class="btn-estandar" href="{{ route('formeditarusuario', $usuario->id) }}">Modificar</a>
 

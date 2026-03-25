@@ -61,7 +61,6 @@
                     <!-- Enlaces textuales -->
                     <li class="navegacion_item"><a href="{{ route('calendario') }}" class="navegacion_link">Cita</a></li>
                     <li class="navegacion_item"><a href="{{ route('fotospublicas') }}" class="navegacion_link">Galería</a></li>
-                    <li class="navegacion_item"><a href="{{ route('fotospublicas') }}" class="navegacion_link">Galería</a></li>
                     <li class="navegacion_item"><a href="{{ route('about') }}" class="navegacion_link">Acerca de</a></li>
 
                     @guest

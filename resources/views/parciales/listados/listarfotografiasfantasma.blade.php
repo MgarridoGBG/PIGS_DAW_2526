@@ -25,7 +25,7 @@
 <div class="listado-contenedor">
     <h2 class="titular-listado">Lista de Fotografías Fantasma</h2>
 
-    <div id="lista-lazyload" data-url="{{ route('filtrarfotosfantasma') }}"> {{-- Contenedor donde se cargará la tabla de fotos fantasma vía AJAX --}}
+    <div style="width:100%" id="lista-lazyload" data-url="{{ route('filtrarfotosfantasma') }}"> {{-- Contenedor donde se cargará la tabla de fotos fantasma vía AJAX --}}
         <div class="spinner-contenedor">
             <img src="{{ Vite::asset('resources/images/spinner.gif') }}" alt="Cargando...">
         </div>

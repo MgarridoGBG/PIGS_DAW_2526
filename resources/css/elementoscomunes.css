@@ -121,6 +121,12 @@ button:hover, .btn-estandar:hover {
     border-bottom: 1px solid var(--color-quinario);
 }
 
+.spinner-contenedor {
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+}
+
 
 /* botones pequeños en vista móvil */
 @media (max-width: 768px) {

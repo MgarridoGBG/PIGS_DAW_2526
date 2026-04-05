@@ -1,6 +1,7 @@
 <?php
-use Illuminate\Support\Facades\Route;
+
 use App\Http\Controllers\FotografiaController;
+use Illuminate\Support\Facades\Route;
 
 // GESTION DE FOTOGRAFÍAS
 // Ruta para listar fotografías, solo accesible para roles con privilegio 'admin_basico'

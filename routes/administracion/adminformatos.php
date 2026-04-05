@@ -1,6 +1,7 @@
 <?php
-use Illuminate\Support\Facades\Route;
+
 use App\Http\Controllers\FormatoController;
+use Illuminate\Support\Facades\Route;
 
 // GESTION DE FORMATOS DE IMAGEN
 // Rutas para listar, editar, crear y borrar formatos de imagen, solo accesible para roles con privilegio 'admin_avanzado'

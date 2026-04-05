@@ -6,43 +6,43 @@ use App\Enums\NombreRole;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\Hash;
 use Tests\TestCase;
 
 class PruebasUserTest extends TestCase
 {
     use RefreshDatabase;
 
-    // Helpers 
+    // Helpers
 
-    //Crea un usuario con un role determinado por nombre usando su factory.
+    // Crea un usuario con un role determinado por nombre usando su factory.
     private function crearUsuarioConRole(string $nombreRole): User
     {
         $role = Role::factory()->create(['nombre_role' => $nombreRole]);
+
         return User::factory()->create(['role_id' => $role->id]);
     }
 
-    //Datos válidos para crear un usuario nuevo.
+    // Datos válidos para crear un usuario nuevo.
     private function DatosUsuarioValidos(array $sobreescribir = []): array
     {
         return array_merge([
-            'nombre'               => 'Usuario',
-            'apellidos'            => 'De Prueba',
-            'email'                => 'userdeprueba@opta.com',
-            'telefono'             => '612345678',
-            'direccion'            => 'Calle de prueba 1',
-            'dni'                  => '12345678Z',
-            'password'             => 'Password1',
+            'nombre' => 'Usuario',
+            'apellidos' => 'De Prueba',
+            'email' => 'userdeprueba@opta.com',
+            'telefono' => '612345678',
+            'direccion' => 'Calle de prueba 1',
+            'dni' => '12345678Z',
+            'password' => 'Password1',
             'password_confirmation' => 'Password1',
         ], $sobreescribir);
     }
 
-        // borrarUsuario
+    // borrarUsuario
 
     /**
      * Borrar un usuario con ID inexistente devuelve la vista errores.error.
      */
-    public function testFalloBorrarIDNoExiste(): void
+    public function test_fallo_borrar_id_no_existe(): void
     {
         $respuesta = $this->withoutMiddleware()
             ->delete(route('borrarusuario', 99999));
@@ -54,7 +54,7 @@ class PruebasUserTest extends TestCase
     /**
      * Borrar un usuario existente lo elimina y devuelve la vista errores.exito.
      */
-    public function testExitoBorraUsuario(): void
+    public function test_exito_borra_usuario(): void
     {
         $usuario = $this->crearUsuarioConRole(NombreRole::CLIENTE->value);
 
@@ -66,12 +66,12 @@ class PruebasUserTest extends TestCase
         $this->assertDatabaseMissing('users', ['id' => $usuario->id]);
     }
 
-        // procesarFormEditarUsuario
+    // procesarFormEditarUsuario
 
     /**
      * nombre con más de 50 caracteres falla la validación.
      */
-    public function testFalloNombreLargo(): void
+    public function test_fallo_nombre_largo(): void
     {
         $usuario = $this->crearUsuarioConRole(NombreRole::CLIENTE->value);
 
@@ -86,7 +86,7 @@ class PruebasUserTest extends TestCase
     /**
      * email con formato inválido falla la validación.
      */
-    public function testFalloEmailInvalido(): void
+    public function test_fallo_email_invalido(): void
     {
         $usuario = $this->crearUsuarioConRole(NombreRole::CLIENTE->value);
 
@@ -101,7 +101,7 @@ class PruebasUserTest extends TestCase
     /**
      * email ya usado por otro usuario falla la validación.
      */
-    public function testFalloEmailDupe(): void
+    public function test_fallo_email_dupe(): void
     {
         $usuarioA = $this->crearUsuarioConRole(NombreRole::CLIENTE->value);
         $usuarioB = $this->crearUsuarioConRole(NombreRole::CLIENTE->value);
@@ -117,7 +117,7 @@ class PruebasUserTest extends TestCase
     /**
      * DNI con formato inválido falla la validación.
      */
-    public function testFalloDniInvalido(): void
+    public function test_fallo_dni_invalido(): void
     {
         $usuario = $this->crearUsuarioConRole(NombreRole::CLIENTE->value);
 
@@ -132,7 +132,7 @@ class PruebasUserTest extends TestCase
     /**
      * DNI ya usado por otro usuario falla la validación.
      */
-    public function testFalloDniDupe(): void
+    public function test_fallo_dni_dupe(): void
     {
         $usuarioA = $this->crearUsuarioConRole(NombreRole::CLIENTE->value);
         $usuarioB = $this->crearUsuarioConRole(NombreRole::CLIENTE->value);
@@ -148,13 +148,13 @@ class PruebasUserTest extends TestCase
     /**
      * password sin confirmación falla la validación.
      */
-    public function testFalloPasswordSinConfirmacion(): void
+    public function test_fallo_password_sin_confirmacion(): void
     {
         $usuario = $this->crearUsuarioConRole(NombreRole::CLIENTE->value);
 
         $respuesta = $this->withoutMiddleware()
             ->put(route('editarusuario', $usuario->id), [
-                'password'              => 'Password1',
+                'password' => 'Password1',
                 'password_confirmation' => 'OtraDistinta1',
             ]);
 
@@ -164,13 +164,13 @@ class PruebasUserTest extends TestCase
     /**
      * password iguales que no cumple el regex (sin mayúscula) falla la validación.
      */
-    public function testFalloPasswordRegex(): void
+    public function test_fallo_password_regex(): void
     {
         $usuario = $this->crearUsuarioConRole(NombreRole::CLIENTE->value);
 
         $respuesta = $this->withoutMiddleware()
             ->put(route('editarusuario', $usuario->id), [
-                'password'              => 'password1',
+                'password' => 'password1',
                 'password_confirmation' => 'password1',
             ]);
 
@@ -180,7 +180,7 @@ class PruebasUserTest extends TestCase
     /**
      * Datos correctos actualizan el usuario y devuelven la vista errores.exito.
      */
-    public function testExitoEditarUsuario(): void
+    public function test_exito_editar_usuario(): void
     {
         $usuario = $this->crearUsuarioConRole(NombreRole::CLIENTE->value);
 
@@ -194,12 +194,12 @@ class PruebasUserTest extends TestCase
         $this->assertDatabaseHas('users', ['id' => $usuario->id, 'nombre' => 'NuevoNombre']);
     }
 
-        // filtrarUsuarios
+    // filtrarUsuarios
 
     /**
      * Filtrar por nombre devuelve solo los usuarios que coinciden.
      */
-    public function testFiltrarPorNombre(): void
+    public function test_filtrar_por_nombre(): void
     {
         $role = Role::factory()->create(['nombre_role' => NombreRole::CLIENTE->value]);
         User::factory()->create(['nombre' => 'Alberto', 'role_id' => $role->id]);
@@ -222,7 +222,7 @@ class PruebasUserTest extends TestCase
     /**
      * Filtrar por email devuelve solo los usuarios que coinciden.
      */
-    public function testFiltrarPorEmail(): void
+    public function test_filtrar_por_email(): void
     {
         $role = Role::factory()->create(['nombre_role' => NombreRole::CLIENTE->value]);
         User::factory()->create(['email' => 'test@dominio.com', 'role_id' => $role->id]);
@@ -240,9 +240,9 @@ class PruebasUserTest extends TestCase
     /**
      * Filtrar por rol devuelve solo los usuarios de ese rol.
      */
-    public function testFiltrarPorRol(): void
+    public function test_filtrar_por_rol(): void
     {
-        $roleCliente  = Role::factory()->create(['nombre_role' => NombreRole::CLIENTE->value]);
+        $roleCliente = Role::factory()->create(['nombre_role' => NombreRole::CLIENTE->value]);
         $roleEmpleado = Role::factory()->create(['nombre_role' => NombreRole::EMPLEADO->value]);
         User::factory()->count(2)->create(['role_id' => $roleCliente->id]);
         User::factory()->count(3)->create(['role_id' => $roleEmpleado->id]);
@@ -255,12 +255,12 @@ class PruebasUserTest extends TestCase
         $this->assertCount(3, $usuariosFiltrados);
     }
 
-        // registrarNuevoUsuario
+    // registrarNuevoUsuario
 
     /**
      * nombre con más de 50 caracteres falla la validación al crear.
      */
-    public function testFalloNuevoNombreLargo(): void
+    public function test_fallo_nuevo_nombre_largo(): void
     {
         $respuesta = $this->withoutMiddleware()
             ->post(route('nuevousuario'), $this->datosUsuarioValidos([
@@ -273,7 +273,7 @@ class PruebasUserTest extends TestCase
     /**
      * email con formato inválido falla la validación al crear.
      */
-    public function testFalloNuevoEmailInvalido(): void
+    public function test_fallo_nuevo_email_invalido(): void
     {
         $respuesta = $this->withoutMiddleware()
             ->post(route('nuevousuario'), $this->datosUsuarioValidos([
@@ -286,7 +286,7 @@ class PruebasUserTest extends TestCase
     /**
      * email duplicado falla la validación al crear.
      */
-    public function testFalloNuevoEmailDupe(): void
+    public function test_fallo_nuevo_email_dupe(): void
     {
         $usuarioExistente = $this->crearUsuarioConRole(NombreRole::CLIENTE->value);
 
@@ -314,7 +314,7 @@ class PruebasUserTest extends TestCase
     /**
      * DNI duplicado falla la validación al crear.
      */
-    public function testFalloNuevoDniDupe(): void
+    public function test_fallo_nuevo_dni_dupe(): void
     {
         $usuarioExistente = $this->crearUsuarioConRole(NombreRole::CLIENTE->value);
 
@@ -329,11 +329,11 @@ class PruebasUserTest extends TestCase
     /**
      * password que no cumple el regex (sin número) falla la validación al crear.
      */
-    public function testFalloNuevoPasswordRegex(): void
+    public function test_fallo_nuevo_password_regex(): void
     {
         $respuesta = $this->withoutMiddleware()
             ->post(route('nuevousuario'), $this->datosUsuarioValidos([
-                'password'              => 'sinNumeroNiMayus',
+                'password' => 'sinNumeroNiMayus',
                 'password_confirmation' => 'sinNumeroNiMayus',
             ]));
 
@@ -343,11 +343,11 @@ class PruebasUserTest extends TestCase
     /**
      * passwords que no coinciden fallan la validación al crear.
      */
-    public function testFalloNuevoPasswordsNoCoinciden(): void
+    public function test_fallo_nuevo_passwords_no_coinciden(): void
     {
         $respuesta = $this->withoutMiddleware()
             ->post(route('nuevousuario'), $this->datosUsuarioValidos([
-                'password'              => 'Password1',
+                'password' => 'Password1',
                 'password_confirmation' => 'Password2',
             ]));
 
@@ -357,7 +357,7 @@ class PruebasUserTest extends TestCase
     /**
      * Datos válidos crean el usuario y devuelven la vista errores.exito.
      */
-    public function testExitoNuevoUsuario(): void
+    public function test_exito_nuevo_usuario(): void
     {
         Role::factory()->create(['nombre_role' => NombreRole::CLIENTE->value]);
 
@@ -369,12 +369,12 @@ class PruebasUserTest extends TestCase
         $this->assertDatabaseHas('users', ['email' => 'userdeprueba@opta.com']);
     }
 
-        // filtrarClientesFantasma
+    // filtrarClientesFantasma
 
     /**
      * Solo devuelve clientes sin reportajes, pedidos ni citas.
      */
-    public function testFiltrarClientesFantasma(): void
+    public function test_filtrar_clientes_fantasma(): void
     {
         $roleCliente = Role::factory()->create(['nombre_role' => NombreRole::CLIENTE->value]);
 

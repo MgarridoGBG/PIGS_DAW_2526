@@ -1,8 +1,7 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ReportajeController;
-
+use Illuminate\Support\Facades\Route;
 
 // GESTION DE REPORTAJES
 // Rutas para listar, editar, crear y borrar reportajes, solo accesible para roles con privilegio 'admin_basico'

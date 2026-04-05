@@ -12,11 +12,11 @@ class PruebasFormatoTest extends TestCase
 
     // Funcion filtrarFormatos. Solo se prueba el filtrado por nombre, ya que es
     // el resto funcionan igual pero con diferentes campos.
-    
+
     /**
      * Al filtrar (por nombre) devuelve la vista correcta con los resultados.
      */
-    public function testFiltrarFormatos(): void
+    public function test_filtrar_formatos(): void
     {
         Formato::factory()->create(['nombre_format' => 'Canvas Grande']);
         Formato::factory()->create(['nombre_format' => 'Pequeño']);
@@ -28,14 +28,13 @@ class PruebasFormatoTest extends TestCase
         $response->assertViewIs('parciales.listados.listaformatos');
         $this->assertEquals(1, $response->viewData('formatos')->total());
     }
-   
 
-        // procesarFormEditarFormato
-    
+    // procesarFormEditarFormato
+
     /**
      * Editar con ancho negativo debe fallar la validación.
      */
-    public function testFalloAnchoNegativo(): void
+    public function test_fallo_ancho_negativo(): void
     {
         $formato = Formato::factory()->create();
 
@@ -48,7 +47,7 @@ class PruebasFormatoTest extends TestCase
     /**
      * Editar con alto negativo debe fallar la validación.
      */
-    public function testFalloAltoNegativo(): void
+    public function test_fallo_alto_negativo(): void
     {
         $formato = Formato::factory()->create();
 
@@ -61,7 +60,7 @@ class PruebasFormatoTest extends TestCase
     /**
      * Editar con nombre_format de más de 50 caracteres debe fallar la validación.
      */
-    public function testFalloNombreLargo(): void
+    public function test_fallo_nombre_largo(): void
     {
         $formato = Formato::factory()->create();
 
@@ -73,12 +72,12 @@ class PruebasFormatoTest extends TestCase
         $response->assertSessionHasErrors(['nombre_format']);
     }
 
-        // registrarNuevoFormato
-    
+    // registrarNuevoFormato
+
     /**
      * Crear formato con ancho negativo debe fallar la validación.
      */
-    public function testFalloNuevoAnchoNegativo(): void
+    public function test_fallo_nuevo_ancho_negativo(): void
     {
         $response = $this->withoutMiddleware()
             ->post(route('nuevoformato'), [
@@ -93,7 +92,7 @@ class PruebasFormatoTest extends TestCase
     /**
      * Crear formato con alto negativo debe fallar la validación.
      */
-    public function testFalloNuevoAltoNegativo(): void
+    public function test_fallo_nuevo_alto_negativo(): void
     {
         $response = $this->withoutMiddleware()
             ->post(route('nuevoformato'), [
@@ -108,7 +107,7 @@ class PruebasFormatoTest extends TestCase
     /**
      * Crear formato con nombre_format de más de 50 caracteres debe fallar la validación.
      */
-    public function testFalloNuevoNombreLargo(): void
+    public function test_fallo_nuevo_nombre_largo(): void
     {
         $response = $this->withoutMiddleware()
             ->post(route('nuevoformato'), [
@@ -123,7 +122,7 @@ class PruebasFormatoTest extends TestCase
     /**
      * Crear formato sin nombre_format es obligatorio.
      */
-    public function testFalloNuevoNombreObligatorio(): void
+    public function test_fallo_nuevo_nombre_obligatorio(): void
     {
         $response = $this->withoutMiddleware()
             ->post(route('nuevoformato'), [
@@ -137,9 +136,9 @@ class PruebasFormatoTest extends TestCase
     /**
      * Crear formato sin ancho es obligatorio.
      */
-    public function testFalloNuevoAnchoObligatorio(): void
+    public function test_fallo_nuevo_ancho_obligatorio(): void
     {
-        $response = $this->withoutMiddleware() // 
+        $response = $this->withoutMiddleware() //
             ->post(route('nuevoformato'), [
                 'nombre_format' => 'Test',
                 'alto' => 20,
@@ -151,7 +150,7 @@ class PruebasFormatoTest extends TestCase
     /**
      * Crear formato sin alto es obligatorio.
      */
-    public function testFalloNuevoAltoObligatorio(): void
+    public function test_fallo_nuevo_alto_obligatorio(): void
     {
         $response = $this->withoutMiddleware()
             ->post(route('nuevoformato'), [
@@ -161,5 +160,4 @@ class PruebasFormatoTest extends TestCase
 
         $response->assertSessionHasErrors(['alto']);
     }
-   
 }

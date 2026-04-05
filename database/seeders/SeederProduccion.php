@@ -2,26 +2,25 @@
 
 namespace Database\Seeders;
 
+use App\Models\Cita;
+use App\Models\Etiqueta;
+use App\Models\Formato;
+use App\Models\Fotografia;
+use App\Models\Item;
+use App\Models\Pedido;
+use App\Models\Privilegio;
+use App\Models\Reportaje;
+use App\Models\Role;
+use App\Models\Soporte;
+use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
-use App\Models\Formato;
-use App\Models\Soporte;
-use App\Models\Etiqueta;
-use App\Models\Privilegio;
-use App\Models\Role;
-use App\Models\User;
-use App\Models\Cita;
-use App\Models\Reportaje;
-use App\Models\Fotografia;
-use App\Models\Pedido;
-use App\Models\Item;
 
 class SeederProduccion extends Seeder
 {
-
     public function run(): void
     {
-        // FORMATOS 
+        // FORMATOS
         $formatos = [
             ['nombre_format' => '10x15', 'ancho' => 10, 'alto' => 15],
             ['nombre_format' => '13x18', 'ancho' => 13, 'alto' => 18],
@@ -45,7 +44,7 @@ class SeederProduccion extends Seeder
             Formato::create($data);
         }
 
-        // SOPORTES 
+        // SOPORTES
         $soportes = [
             ['nombre_soport' => 'Papel Brillo', 'disponibilidad' => true, 'precio' => 40],
             ['nombre_soport' => 'Papel Mate', 'disponibilidad' => true, 'precio' => 40],
@@ -69,7 +68,7 @@ class SeederProduccion extends Seeder
             Soporte::create($data);
         }
 
-        // ETIQUETAS 
+        // ETIQUETAS
         $etiquetas = [
             'NATURALEZA',
             'ANIMALES',
@@ -91,7 +90,7 @@ class SeederProduccion extends Seeder
             Etiqueta::create(['nombre_etiqueta' => $nombre]);
         }
 
-        // PRIVILEGIOS 
+        // PRIVILEGIOS
         $privilegios = [
             'editar_propio',
             'concertar_cita',
@@ -103,7 +102,7 @@ class SeederProduccion extends Seeder
             Privilegio::create(['nombre_priv' => $nombre]);
         }
 
-        // ROLES + asignación de privilegios 
+        // ROLES + asignación de privilegios
         // invitado  → ninguno
         $roleInvitado = Role::create(['nombre_role' => 'invitado']);
 
@@ -119,7 +118,7 @@ class SeederProduccion extends Seeder
         $roleAdmin = Role::create(['nombre_role' => 'admin']);
         $roleAdmin->privilegios()->sync([1, 2, 3, 4, 5]);
 
-        // USERS 
+        // USERS
         $users = [
             [
                 'email' => 'invitado@opta.com',
@@ -236,7 +235,7 @@ class SeederProduccion extends Seeder
             User::create($data);
         }
 
-        // CITAS 
+        // CITAS
         $citas = [
             [
                 'fecha_cita' => now()->addDays(1)->format('Y-m-d'),
@@ -261,7 +260,7 @@ class SeederProduccion extends Seeder
             Cita::create($data);
         }
 
-        // REPORTAJES 
+        // REPORTAJES
         $reportajes = [
             ['tipo' => 'galeria', 'codigo' => '20251012COLEC0001',  'descripcion' => 'Escenas de la Sierra de Huelva', 'fecha_report' => '2025-10-12', 'publico' => true,  'user_id' => 1],
             ['tipo' => 'galeria', 'codigo' => '20260113COLEC0002',  'descripcion' => 'Playas y Mares de Cádiz', 'fecha_report' => '2026-01-13', 'publico' => true,  'user_id' => 1],
@@ -279,7 +278,7 @@ class SeederProduccion extends Seeder
             Reportaje::create($data);
         }
 
-        // FOTOGRAFIAS 
+        // FOTOGRAFIAS
         // Rangos: [inicio, fin, reportaje_id]
         $rangos = [
             [1, 15, 1],
@@ -296,25 +295,23 @@ class SeederProduccion extends Seeder
         foreach ($rangos as [$inicio, $fin, $reportajeId]) {
             for ($i = $inicio; $i <= $fin; $i++) {
                 Fotografia::create([
-                    'nombre_foto'   => 'MGB' . str_pad($i, 4, '0', STR_PAD_LEFT) . '.jpg',
-                    'reportaje_id'  => $reportajeId,
+                    'nombre_foto' => 'MGB'.str_pad($i, 4, '0', STR_PAD_LEFT).'.jpg',
+                    'reportaje_id' => $reportajeId,
                 ]);
             }
         }
 
         // Fotografías "fantasma" (reportaje 2, sin archivo en storage)
         Fotografia::create([
-            'nombre_foto'   => 'Fantasma_01.jpg',
-            'reportaje_id'  => 2,
+            'nombre_foto' => 'Fantasma_01.jpg',
+            'reportaje_id' => 2,
         ]);
         Fotografia::create([
-            'nombre_foto'   => 'Fantasma_02.jpg',
-            'reportaje_id'  => 2,
+            'nombre_foto' => 'Fantasma_02.jpg',
+            'reportaje_id' => 2,
         ]);
 
-
-
-        // ETIQUETAS A FOTOGRAFÍAS (fotos 1 a 45, reportajes Públicos, 4 etiquetas aleatorias cada una) 
+        // ETIQUETAS A FOTOGRAFÍAS (fotos 1 a 45, reportajes Públicos, 4 etiquetas aleatorias cada una)
         $totalEtiquetas = Etiqueta::count(); // 15
         for ($fotoId = 1; $fotoId <= 45; $fotoId++) {
             $foto = Fotografia::find($fotoId);
@@ -328,7 +325,7 @@ class SeederProduccion extends Seeder
             }
         }
 
-        // PEDIDOS 
+        // PEDIDOS
         $pedidos = [
             ['estado_pedido' => 'emitido', 'fecha_pedido' => '2025-12-23', 'user_id' => 4],
             ['estado_pedido' => 'pagado', 'fecha_pedido' => '2025-10-01', 'user_id' => 4],
@@ -340,21 +337,21 @@ class SeederProduccion extends Seeder
             Pedido::create($data);
         }
 
-        // ITEMS (5 por pedido, fotos de reportajes 1, 2 y 3 → IDs 1-45) 
+        // ITEMS (5 por pedido, fotos de reportajes 1, 2 y 3 → IDs 1-45)
         // IDs de fotografías de los reportajes 1, 2 y 3
         $fotosDisponibles = Fotografia::whereIn('reportaje_id', [1, 2, 3])->pluck('id')->toArray();
-        $formatoIds  = Formato::pluck('id')->toArray();
-        $soporteIds  = Soporte::pluck('id')->toArray();
+        $formatoIds = Formato::pluck('id')->toArray();
+        $soporteIds = Soporte::pluck('id')->toArray();
 
         $totalPedidos = Pedido::count();
         for ($pedidoId = 1; $pedidoId <= $totalPedidos; $pedidoId++) {
             // Elegir 5 fotografías al azar (con posible repetición permitida)
             for ($j = 0; $j < 5; $j++) {
-                $fotoId    = $fotosDisponibles[array_rand($fotosDisponibles)];
+                $fotoId = $fotosDisponibles[array_rand($fotosDisponibles)];
                 $formatoId = $formatoIds[array_rand($formatoIds)];
                 $soporteId = $soporteIds[array_rand($soporteIds)];
-                $cantidad  = rand(1, 5);
-                $precio    = round(rand(500, 5000) / 100, 2); // precio aleatorio entre 5.00 y 50.00
+                $cantidad = rand(1, 5);
+                $precio = round(rand(500, 5000) / 100, 2); // precio aleatorio entre 5.00 y 50.00
 
                 Item::create([
                     'pedido_id' => $pedidoId,

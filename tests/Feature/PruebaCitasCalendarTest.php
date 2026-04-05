@@ -15,19 +15,19 @@ class PruebaCitasCalendarTest extends TestCase
 {
     use RefreshDatabase;
 
-    
     // Helper
 
     // Crea un User con el Role indicado.
     private function crearUsuarioConRole(string $nombre): User
     {
         $role = Role::factory()->create(['nombre_role' => $nombre]);
+
         return User::factory()->create(['role_id' => $role->id]);
     }
 
-      // index  GET /api/citas
-    // Sin autenticación redirige al login. 
-    public function testIndexRequiereAutenticacion(): void
+    // index  GET /api/citas
+    // Sin autenticación redirige al login.
+    public function test_index_requiere_autenticacion(): void
     {
         $response = $this->getJson('/api/citas');
 
@@ -35,14 +35,14 @@ class PruebaCitasCalendarTest extends TestCase
     }
 
     // Devuelve las citas del rango con el formato esperado por FullCalendar.
-    public function testIndexDevuelveCitasEnRango(): void
+    public function test_index_devuelve_citas_en_rango(): void
     {
         $user = $this->crearUsuarioConRole(NombreRole::CLIENTE->value);
 
         Cita::factory()->create([
-            'user_id'    => $user->id,
+            'user_id' => $user->id,
             'fecha_cita' => '2026-06-05',
-            'turno'      => TurnoCita::MANANA->value,
+            'turno' => TurnoCita::MANANA->value,
         ]);
 
         $response = $this->actingAs($user)
@@ -52,20 +52,19 @@ class PruebaCitasCalendarTest extends TestCase
         $response->assertOk();
         $response->assertJsonCount(1);
         $response->assertJsonFragment([
-            'start'  => '2026-06-05',
+            'start' => '2026-06-05',
             'allDay' => true,
-            'title'  => 'Mañana (ocupado)',
+            'title' => 'Mañana (ocupado)',
         ]);
         $response->assertJsonFragment([
             'turno' => TurnoCita::MANANA->value,
         ]);
     }
 
-
-      // actualizarMiCita  PUT /api/micita
+    // actualizarMiCita  PUT /api/micita
 
     // 'fecha' y 'turno' son obligatorios.
-    public function testActualizarCitaFalloSinDatos(): void
+    public function test_actualizar_cita_fallo_sin_datos(): void
     {
         $user = $this->crearUsuarioConRole(NombreRole::CLIENTE->value);
 
@@ -78,7 +77,7 @@ class PruebaCitasCalendarTest extends TestCase
     }
 
     // Turno no permitido falla la validación.
-    public function testActualizarCitaFalloTurnoInvalido(): void
+    public function test_actualizar_cita_fallo_turno_invalido(): void
     {
         $user = $this->crearUsuarioConRole(NombreRole::CLIENTE->value);
 
@@ -94,13 +93,13 @@ class PruebaCitasCalendarTest extends TestCase
     }
 
     // Turno ya está reservado se devuelve error de validación.
-    public function testActualizarCitaFalloTurnoOcupado(): void
+    public function test_actualizar_cita_fallo_turno_ocupado(): void
     {
         $otroUser = $this->crearUsuarioConRole(NombreRole::CLIENTE->value);
         Cita::factory()->create([
-            'user_id'    => $otroUser->id,
+            'user_id' => $otroUser->id,
             'fecha_cita' => '2026-07-10',
-            'turno'      => TurnoCita::MANANA->value,
+            'turno' => TurnoCita::MANANA->value,
         ]);
 
         $user = $this->crearUsuarioConRole(NombreRole::CLIENTE->value);
@@ -117,7 +116,7 @@ class PruebaCitasCalendarTest extends TestCase
     }
 
     // Un usuario sin cita previa crea una nueva con éxito.
-    public function testActualizarCitaCreaCorrectamente(): void
+    public function test_actualizar_cita_crea_correctamente(): void
     {
         $user = $this->crearUsuarioConRole(NombreRole::CLIENTE->value);
 
@@ -130,28 +129,28 @@ class PruebaCitasCalendarTest extends TestCase
 
         $response->assertOk();
         $response->assertJsonFragment([
-            'start'  => '2026-07-15',
+            'start' => '2026-07-15',
             'allDay' => true,
-            'title'  => 'Tarde (ocupado)',
+            'title' => 'Tarde (ocupado)',
         ]);
         $response->assertJsonFragment(['turno' => TurnoCita::TARDE->value]);
 
         $this->assertDatabaseHas('citas', [
-            'user_id'     => $user->id,
-            'fecha_cita'  => '2026-07-15',
-            'turno'       => TurnoCita::TARDE->value,
+            'user_id' => $user->id,
+            'fecha_cita' => '2026-07-15',
+            'turno' => TurnoCita::TARDE->value,
             'estado_cita' => EstadoCita::SOLICITADA->value,
         ]);
     }
 
     // Un usuario con cita previa la reprograma con éxito.
-    public function testActualizarCitaReprogramaCitaExistente(): void
+    public function test_actualizar_cita_reprograma_cita_existente(): void
     {
         $user = $this->crearUsuarioConRole(NombreRole::CLIENTE->value);
         Cita::factory()->create([
-            'user_id'     => $user->id,
-            'fecha_cita'  => '2026-07-01',
-            'turno'       => TurnoCita::MANANA->value,
+            'user_id' => $user->id,
+            'fecha_cita' => '2026-07-01',
+            'turno' => TurnoCita::MANANA->value,
             'estado_cita' => EstadoCita::CONFIRMADA->value,
         ]);
 
@@ -168,17 +167,17 @@ class PruebaCitasCalendarTest extends TestCase
         // Solo debe existir una cita para este usuario
         $this->assertSame(1, Cita::where('user_id', $user->id)->count());
         $this->assertDatabaseHas('citas', [
-            'user_id'     => $user->id,
-            'fecha_cita'  => '2026-08-20',
-            'turno'       => TurnoCita::TARDE->value,
+            'user_id' => $user->id,
+            'fecha_cita' => '2026-08-20',
+            'turno' => TurnoCita::TARDE->value,
             'estado_cita' => EstadoCita::SOLICITADA->value,
         ]);
     }
 
-      // cancelarMiCita  DELETE /api/micita
+    // cancelarMiCita  DELETE /api/micita
 
     // Si el usuario no tiene cita devuelve 204 sin error.
-    public function testCancelarCitaSinCitaDevuelve204(): void
+    public function test_cancelar_cita_sin_cita_devuelve204(): void
     {
         $user = $this->crearUsuarioConRole(NombreRole::CLIENTE->value);
 
@@ -190,13 +189,13 @@ class PruebaCitasCalendarTest extends TestCase
     }
 
     // Con cita existente la elimina y devuelve 204.
-    public function testCancelarCitaEliminaCitaYDevuelve204(): void
+    public function test_cancelar_cita_elimina_cita_y_devuelve204(): void
     {
         $user = $this->crearUsuarioConRole(NombreRole::CLIENTE->value);
         $cita = Cita::factory()->create([
-            'user_id'    => $user->id,
+            'user_id' => $user->id,
             'fecha_cita' => '2026-09-05',
-            'turno'      => TurnoCita::MANANA->value,
+            'turno' => TurnoCita::MANANA->value,
         ]);
 
         $response = $this->actingAs($user)

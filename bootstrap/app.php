@@ -1,9 +1,9 @@
 <?php
 
+use App\Http\Middleware\ChequeaPrivilegio;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
-use App\Http\Middleware\ChequeaPrivilegio;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -20,7 +20,7 @@ return Application::configure(basePath: dirname(__DIR__))
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         // Renderables de excepciones.
-    }) 
+    })
     ->withSingletons([
         \Illuminate\Contracts\Debug\ExceptionHandler::class => \App\Exceptions\Handler::class,
     ])->create();

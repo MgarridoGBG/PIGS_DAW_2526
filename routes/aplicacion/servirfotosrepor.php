@@ -1,7 +1,7 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\FotografiaController;
+use Illuminate\Support\Facades\Route;
 
 // RUTAS PARA MOSTRAR FOTOGRAFÍAS Y REPORTAJES
 // Rutas para servir archivos desde storage/private
@@ -25,7 +25,7 @@ Route::get(
 Route::get('/reportaje/{id}/fotos', [FotografiaController::class, 'mostrarFotosReportaje'])
     ->name('reportajefotos');
 
-//Ruta para mostrar la galeria de fotos publicas
+// Ruta para mostrar la galeria de fotos publicas
 Route::get('/fotospublicas', [FotografiaController::class, 'mostrarFotosPublicas'])
     ->name('fotospublicas');
 

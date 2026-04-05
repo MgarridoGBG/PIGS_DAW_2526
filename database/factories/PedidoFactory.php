@@ -2,14 +2,14 @@
 
 namespace Database\Factories;
 
-use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Enums\EstadoPedido;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
- /**
-     * Factoria para el modelo Pedido.
-     *
-     * @var string
-     */
+/**
+ * Factoria para el modelo Pedido.
+ *
+ * @var string
+ */
 class PedidoFactory extends Factory
 {
     protected $model = \App\Models\Pedido::class;

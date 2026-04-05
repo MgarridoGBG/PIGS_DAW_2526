@@ -2,8 +2,8 @@
 
 namespace Database\Factories;
 
-use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Enums\NombreRole;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
  * Factoria para el modelo Role.
@@ -13,7 +13,7 @@ use App\Enums\NombreRole;
 class RoleFactory extends Factory
 {
     protected $model = \App\Models\Role::class;
-    
+
     /*
      * Define el estado por defecto del modelo.
      *

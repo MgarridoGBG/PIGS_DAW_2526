@@ -3,7 +3,8 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-//PROYECTO
+
+// PROYECTO
 return new class extends Migration
 {
     /**
@@ -20,7 +21,7 @@ return new class extends Migration
             $table->string('direccion', 250);
             $table->string('password', 255);
             $table->string('dni', 9)->unique();
-            $table->foreignId('role_id')->constrained('roles'); 
+            $table->foreignId('role_id')->constrained('roles');
             $table->boolean('marcado_eliminar')->default(false);
             $table->timestamp('email_verified_at')->nullable();
             $table->rememberToken();

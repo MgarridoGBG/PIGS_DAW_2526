@@ -13,8 +13,9 @@ use Illuminate\Database\Eloquent\Model;
 class Pedido extends Model
 {
     use HasFactory;
+
     /** Campos asignables */
-    protected $fillable = ['estado_pedido','fecha_pedido','user_id'];
+    protected $fillable = ['estado_pedido', 'fecha_pedido', 'user_id'];
 
     /**
      * Relación: un pedido pertenece a un usuario.

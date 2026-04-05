@@ -1,6 +1,7 @@
 <?php
-use Illuminate\Support\Facades\Route;
+
 use App\Http\Controllers\UserController;
+use Illuminate\Support\Facades\Route;
 
 // GESTION DE USUARIOS
 // Edicion de usuarios por admininstrador

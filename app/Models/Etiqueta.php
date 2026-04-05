@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Model;
 class Etiqueta extends Model
 {
     use HasFactory;
+
     /** Campos asignables */
     protected $fillable = ['nombre_etiqueta'];
 
@@ -25,6 +26,6 @@ class Etiqueta extends Model
     public function fotografias()
     {
         return $this->belongsToMany(Fotografia::class, 'fotografias_etiquetas')
-                    ->withTimestamps();
+            ->withTimestamps();
     }
 }

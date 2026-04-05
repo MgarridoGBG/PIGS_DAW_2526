@@ -16,11 +16,12 @@ use Illuminate\Database\Eloquent\Model;
 class Cita extends Model
 {
     use HasFactory;
+
     /** Campos asignables masivamente */
     protected $fillable = ['fecha_cita', 'turno', 'estado_cita', 'user_id'];
 
     /** Casts para atributos */
-    protected $casts = ['fecha_cita' => 'date:Y-m-d',]; 
+    protected $casts = ['fecha_cita' => 'date:Y-m-d'];
 
     /**
      * Relación: una cita pertenece a un usuario.

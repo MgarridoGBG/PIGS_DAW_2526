@@ -2,23 +2,21 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Formato;
-use App\Models\Soporte;
 use App\Models\Fotografia;
-use App\Models\Pedido;
 use App\Models\Item;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Auth;
+use App\Models\Pedido;
+use App\Models\Soporte;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 /**
  * Controlador para gestionar el carrito de la compra en sesión.
- * 
  */
 class CarritoController extends Controller
 {
-
     /**
      * Muestra el formulario para añadir un nuevo item al carrito
      * con la ID de una fotografía.
@@ -38,19 +36,16 @@ class CarritoController extends Controller
             'nombre_fotografia' => $nombreFotografia,
             'reportaje' => $reportaje,
             'formatos' => $formatos,
-            'soportes' => $soportes
+            'soportes' => $soportes,
         ]);
     }
-
-
 
     /**
      * Añade un nuevo item al carrito almacenado en sesión.
      *
-     * Recibe y valida los campos del formulario anterior     
+     * Recibe y valida los campos del formulario anterior
      * y guarda el item en la sesión bajo el nombre 'Carrito'.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Contracts\View\View
      */
     public function registrarNuevoItemCarrito(Request $request)
@@ -69,12 +64,12 @@ class CarritoController extends Controller
         $formato = Formato::where('nombre_format', $nombreFormato)->first();
         $soporte = Soporte::where('nombre_soport', $nombreSoporte)->first();
 
-        if (!$formato || !$soporte) {
+        if (! $formato || ! $soporte) {
             return view('errores.error', ['mensaje' => 'Error al añadir el artículo.']);
         }
 
         // Calcular el precio del item usando el método del ItemController
-        $itemController = new ItemController();
+        $itemController = new ItemController;
         $precio = $itemController->calcularPrecio($formato->id, $soporte->id);
 
         // Crear el item para añadir a sesión
@@ -83,7 +78,7 @@ class CarritoController extends Controller
             'formato_id' => $formato->id,
             'soporte_id' => $soporte->id,
             'precio' => $precio,
-            'cantidad' => $cantidad
+            'cantidad' => $cantidad,
         ];
 
         // Comprobar si existe Carrito en sesión
@@ -115,7 +110,7 @@ class CarritoController extends Controller
                 'reportaje_codigo' => $reportajeCodigo ?? 'N/A',
                 'precio' => $item['precio'] ?? 0.00,
                 'cantidad' => $item['cantidad'] ?? 1,
-                'precio_total' => round(($item['precio'] ?? 0.00) * ($item['cantidad'] ?? 1), 2)
+                'precio_total' => round(($item['precio'] ?? 0.00) * ($item['cantidad'] ?? 1), 2),
             ];
         }
 
@@ -129,7 +124,6 @@ class CarritoController extends Controller
      * Muestra la vista completa del carrito a partir de los items guardados
      * en sesión y calcula el precio total.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Contracts\View\View
      */
     public function MostrarCarrito(Request $request)
@@ -155,7 +149,7 @@ class CarritoController extends Controller
                 'reportaje_codigo' => $reportajeCodigo ?? 'N/A',
                 'precio' => $item['precio'] ?? 0.00,
                 'cantidad' => $item['cantidad'] ?? 1,
-                'precio_total' => round(($item['precio'] ?? 0.00) * ($item['cantidad'] ?? 1), 2)
+                'precio_total' => round(($item['precio'] ?? 0.00) * ($item['cantidad'] ?? 1), 2),
             ];
         }
 
@@ -169,7 +163,6 @@ class CarritoController extends Controller
      * Elimina un item del carrito por su índice ('item_index') y actualiza la
      * sesión. Recalcula y devuelve vista parcial con los otros items.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Contracts\View\View
      */
     public function borrarItemCarrito(Request $request)
@@ -185,7 +178,7 @@ class CarritoController extends Controller
             $carrito = array_values($carrito); // Reindexar
         }
 
-        // Guardar el carrito 
+        // Guardar el carrito
         session(['Carrito' => $carrito]);
 
         // Recuperar datos, calcular precio y mostrar la vista.
@@ -206,7 +199,7 @@ class CarritoController extends Controller
                 'reportaje_codigo' => $reportajeCodigo ?? 'N/A',
                 'precio' => $item['precio'] ?? 0.00,
                 'cantidad' => $item['cantidad'] ?? 1,
-                'precio_total' => round(($item['precio'] ?? 0.00) * ($item['cantidad'] ?? 1), 2)
+                'precio_total' => round(($item['precio'] ?? 0.00) * ($item['cantidad'] ?? 1), 2),
             ];
         }
 
@@ -218,13 +211,13 @@ class CarritoController extends Controller
     /**
      * Vacía el carrito completo eliminando la clave 'Carrito' de la sesión.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Contracts\View\View
      */
     public function vaciarCarrito(Request $request)
     {
-        
+
         session()->forget('Carrito');
+
         return view('parciales.vercarrito', ['items' => [], 'precioTotal' => 0]);
     }
 
@@ -236,7 +229,6 @@ class CarritoController extends Controller
      * - Si todo va bien, confirma la transacción y vacía la
      *   sesión; en caso contrario, revierte y muestra un error.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Contracts\View\View
      */
     public function procesarCarrito(Request $request)
@@ -253,21 +245,22 @@ class CarritoController extends Controller
 
         // Intentar crear el pedido y los items, si falla algo, se revierte todo
         try {
-            
+
             // Crear pedido
-            $pedido = new Pedido();
+            $pedido = new Pedido;
             $pedido->user_id = Auth::id();
             $pedido->estado_pedido = 'emitido';
             $pedido->fecha_pedido = Carbon::now();
-            
-            if (!$pedido->save()) {
+
+            if (! $pedido->save()) {
                 DB::rollBack();
+
                 return view('errores.error', ['mensaje' => 'Pedido no emitido']);
             }
 
             // Crear items del pedido
             foreach ($carrito as $itemCarrito) {
-                $item = new Item();
+                $item = new Item;
                 $item->pedido_id = $pedido->id;
                 $item->fotografia_id = $itemCarrito['fotografia_id'];
                 $item->formato_id = $itemCarrito['formato_id'];
@@ -276,8 +269,9 @@ class CarritoController extends Controller
                 $item->cantidad = $itemCarrito['cantidad'] ?? 1;
 
                 // Si falla al guardar algún item, deshacer todo
-                if (!$item->save()) {
+                if (! $item->save()) {
                     DB::rollBack();
+
                     return view('errores.error', ['mensaje' => 'Pedido no emitido']);
                 }
             }
@@ -287,24 +281,25 @@ class CarritoController extends Controller
 
             // Vaciar el carrito y devolver vista
             session()->forget('Carrito');
-            
+
             return view('errores.exito', ['mensaje' => 'Gracias, pedido registrado']);
         } catch (\Exception $e) {
 
             // En caso de cualquier error, deshacer transacción
             DB::rollBack();
+
             return view('errores.error', ['mensaje' => 'Pedido no emitido']);
         }
     }
 
     /**
      * Calcula el precio total del carrito en sesión.
-     *     
+     *
      * @return float
      */
     public function calcularPrecio()
     {
-      
+
         $carrito = session('Carrito', []);
 
         $precioTotal = 0;

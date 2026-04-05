@@ -2,10 +2,9 @@
 
 namespace Database\Factories;
 
-use Illuminate\Database\Eloquent\Factories\Factory;
-use App\Enums\TurnoCita;
 use App\Enums\EstadoCita;
-
+use App\Enums\TurnoCita;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
 class CitaFactory extends Factory
 {

@@ -1,6 +1,7 @@
 <?php
-use Illuminate\Support\Facades\Route;
+
 use App\Http\Controllers\EtiquetaController;
+use Illuminate\Support\Facades\Route;
 
 // GESTION DE ETIQUETAS
 // Ruta para añadir una etiqueta a una foto (solo admin_basico)

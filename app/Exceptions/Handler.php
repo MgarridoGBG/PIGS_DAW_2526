@@ -11,13 +11,9 @@ use Throwable;
  * Centraliza el manejo de excepciones para la aplicación. Se extiende la
  * clase  de Laravel ExceptionHandler y se sobreescribe el método
  * render para devolver vistas de error personalizadas y amigables para el usuario.
- *
  */
-
 class Handler extends ExceptionHandler
 {
-  
-
     public function render($peticion, Throwable $excepcion)
     {
         // Manejo de MethodNotAllowedHttpException: cuando se solicita

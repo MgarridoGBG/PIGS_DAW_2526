@@ -19,8 +19,9 @@ use Illuminate\Database\Eloquent\Model;
 class Reportaje extends Model
 {
     use HasFactory;
+
     /** Campos asignables */
-    protected $fillable = ['tipo','codigo','descripcion','fecha_report','user_id','publico'];
+    protected $fillable = ['tipo', 'codigo', 'descripcion', 'fecha_report', 'user_id', 'publico'];
 
     /**
      * Relación: un reportaje pertenece a un usuario.

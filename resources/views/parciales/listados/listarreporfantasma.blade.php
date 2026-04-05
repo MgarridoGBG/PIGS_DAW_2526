@@ -23,9 +23,9 @@
 <div class="listado-contenedor">
     <h2 class="titular-listado">Listado de Reportajes Fantasma</h2>
 
-<div id="lista-lazyload" style="width:100%"  data-url="{{ route('filtrarreportajesfantasma') }}"> {{-- Contenedor donde se cargará la tabla de reportajes fantasma vía AJAX --}}
+<div style="width:100%" id="lista-lazyload" data-url="{{ route('filtrarreportajesfantasma') }}"> {{-- Contenedor donde se cargará la tabla de reportajes fantasma vía AJAX --}}
     <div class="spinner-contenedor">
-        <img src="{{ Vite::asset('resources/images/spinner.gif') }}" alt="Cargando...">
+        <img class="spinner-img" src="{{ Vite::asset('resources/images/spinner.gif') }}" alt="Cargando...">
     </div>
 </div>
     <div class="redirector-publi-priv">

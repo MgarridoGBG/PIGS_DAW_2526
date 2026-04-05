@@ -3,15 +3,14 @@
 namespace Tests\Feature;
 
 use App\Enums\EstadoPedido;
+use App\Enums\NombreRole;
 use App\Http\Controllers\PedidoController;
 use App\Models\Formato;
 use App\Models\Item;
 use App\Models\Pedido;
+use App\Models\Role;
 use App\Models\Soporte;
 use App\Models\User;
-use App\Models\Fotografia;
-use App\Models\Role;
-use App\Enums\NombreRole;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -19,20 +18,21 @@ class PruebasPedidoTest extends TestCase
 {
     use RefreshDatabase;
 
-        // Helper privado para crear usuario con role específico
-    
+    // Helper privado para crear usuario con role específico
+
     private function crearUsuarioConRole(string $nombreRole): User
     {
         $role = Role::factory()->create(['nombre_role' => $nombreRole]);
+
         return User::factory()->create(['role_id' => $role->id]);
     }
 
-        // calcularPrecioPedido
-    
+    // calcularPrecioPedido
+
     /**
      * Calcula correctamente el precio total sumando precio * cantidad de cada item.
      */
-    public function testCalculaPrecioPedidoBien(): void
+    public function test_calcula_precio_pedido_bien(): void
     {
         $pedido = Pedido::factory()->create();
 
@@ -41,18 +41,18 @@ class PruebasPedidoTest extends TestCase
         // Item 2: precio=5.50, cantidad=4 → subtotal=22
         Item::factory()->create(['pedido_id' => $pedido->id, 'precio' => 5.50, 'cantidad' => 4]);
 
-        $controlador = new PedidoController();
-        $resultado   = $controlador->calcularPrecioPedido($pedido->id);
+        $controlador = new PedidoController;
+        $resultado = $controlador->calcularPrecioPedido($pedido->id);
 
         $this->assertSame(42.00, $resultado);
     }
 
-        // filtrarPedidos
-    
+    // filtrarPedidos
+
     /**
      * Filtrar por id devuelve solo el pedido con ese identificador.
      */
-    public function testFiltrarPedidosPorId(): void
+    public function test_filtrar_pedidos_por_id(): void
     {
         $pedidoBuscado = Pedido::factory()->create();
         Pedido::factory()->count(3)->create();
@@ -68,7 +68,7 @@ class PruebasPedidoTest extends TestCase
     /**
      * Filtrar por email_usuario devuelve solo los pedidos de ese usuario.
      */
-    public function testFiltrarPedidosEmailUser(): void
+    public function test_filtrar_pedidos_email_user(): void
     {
         $usuarioA = $this->crearUsuarioConRole(NombreRole::CLIENTE->value);
         $usuarioB = $this->crearUsuarioConRole(NombreRole::CLIENTE->value);
@@ -83,12 +83,12 @@ class PruebasPedidoTest extends TestCase
         $this->assertSame(2, $response->viewData('pedidos')->total());
     }
 
-        // procesarFormEditarPedido
-    
+    // procesarFormEditarPedido
+
     /**
      * email_usuario con formato inválido falla la validación.
      */
-    public function testFalloEmailInvalido(): void
+    public function test_fallo_email_invalido(): void
     {
         $pedido = Pedido::factory()->create();
 
@@ -103,7 +103,7 @@ class PruebasPedidoTest extends TestCase
     /**
      * email_usuario con formato correcto pero no existente en BD falla la validación.
      */
-    public function testFalloEmailNoExiste(): void
+    public function test_fallo_email_no_existe(): void
     {
         $pedido = Pedido::factory()->create();
 
@@ -116,9 +116,9 @@ class PruebasPedidoTest extends TestCase
     }
 
     /**
-     * estado_pedido fuera del enum falla la validación. 
+     * estado_pedido fuera del enum falla la validación.
      */
-    public function testFalloEstadoInvalido(): void
+    public function test_fallo_estado_invalido(): void
     {
         $pedido = Pedido::factory()->create();
 
@@ -133,7 +133,7 @@ class PruebasPedidoTest extends TestCase
     /**
      * fecha_pedido con valor no-fecha falla la validación.
      */
-    public function testFalloFechaInvalida(): void
+    public function test_fallo_fecha_invalida(): void
     {
         $pedido = Pedido::factory()->create();
 
@@ -148,24 +148,24 @@ class PruebasPedidoTest extends TestCase
     /**
      * Con datos válidos la transacción actualiza el pedido correctamente.
      */
-    public function testEditarPedidoDatosValidos(): void
+    public function test_editar_pedido_datos_validos(): void
     {
-        $pedido       = Pedido::factory()->create(['estado_pedido' => EstadoPedido::EMITIDO->value]);
+        $pedido = Pedido::factory()->create(['estado_pedido' => EstadoPedido::EMITIDO->value]);
         $nuevoUsuario = $this->crearUsuarioConRole(NombreRole::CLIENTE->value);
 
         $response = $this->withoutMiddleware()
             ->put(route('editarpedido', $pedido->id), [
                 'email_usuario' => $nuevoUsuario->email,
                 'estado_pedido' => EstadoPedido::PAGADO->value,
-                'fecha_pedido'  => '2026-06-01',
+                'fecha_pedido' => '2026-06-01',
             ]);
 
         $response->assertViewIs('errores.exito');
         $this->assertDatabaseHas('pedidos', [
-            'id'           => $pedido->id,
-            'user_id'      => $nuevoUsuario->id,
+            'id' => $pedido->id,
+            'user_id' => $nuevoUsuario->id,
             'estado_pedido' => EstadoPedido::PAGADO->value,
-            'fecha_pedido'  => '2026-06-01',
+            'fecha_pedido' => '2026-06-01',
         ]);
     }
 
@@ -173,9 +173,9 @@ class PruebasPedidoTest extends TestCase
      * Si algún item del carrito no se puede añadir (tiene fotografia_id inválida), la transacción
      * hace rollback y el pedido no queda modificado.
      */
-    public function testFalloEditarPedidoItemInvalido(): void
+    public function test_fallo_editar_pedido_item_invalido(): void
     {
-        $pedido        = Pedido::factory()->create(['estado_pedido' => EstadoPedido::EMITIDO->value]);
+        $pedido = Pedido::factory()->create(['estado_pedido' => EstadoPedido::EMITIDO->value]);
         $estadoOriginal = $pedido->estado_pedido;
 
         $formato = Formato::factory()->create();
@@ -184,10 +184,10 @@ class PruebasPedidoTest extends TestCase
         // Carrito con fotografia_id inexistente → FK constraint fallará en SQLite
         $carritoInvalido = [[
             'fotografia_id' => 99999,
-            'formato_id'    => $formato->id,
-            'soporte_id'    => $soporte->id,
-            'precio'        => 10.00,
-            'cantidad'      => 1,
+            'formato_id' => $formato->id,
+            'soporte_id' => $soporte->id,
+            'precio' => 10.00,
+            'cantidad' => 1,
         ]];
 
         $response = $this->withoutMiddleware()
@@ -201,9 +201,8 @@ class PruebasPedidoTest extends TestCase
 
         // El estado del pedido no debe haber cambiado
         $this->assertDatabaseHas('pedidos', [
-            'id'            => $pedido->id,
+            'id' => $pedido->id,
             'estado_pedido' => $estadoOriginal,
         ]);
     }
 }
-

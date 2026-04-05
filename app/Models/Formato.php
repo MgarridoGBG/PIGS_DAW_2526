@@ -14,8 +14,9 @@ use Illuminate\Database\Eloquent\Model;
 class Formato extends Model
 {
     use HasFactory;
+
     /** Campos asignables */
-    protected $fillable = ['nombre_format','ancho','alto'];
+    protected $fillable = ['nombre_format', 'ancho', 'alto'];
 
     /**
      * Relación: un formato puede estar en muchos items.

@@ -1,10 +1,10 @@
 <?php
 
+use App\Enums\EstadoCita;
+use App\Enums\TurnoCita;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-use App\Enums\TurnoCita;
-use App\Enums\EstadoCita;
 
 return new class extends Migration
 {

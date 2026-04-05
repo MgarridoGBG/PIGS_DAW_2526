@@ -13,7 +13,6 @@ class LoginController extends Controller
      *
      * @return \Illuminate\Contracts\View\View
      */
-
     public function mostrar_form_login()
     {
         return view('auth.login');
@@ -23,11 +22,9 @@ class LoginController extends Controller
      * Procesar el intento de inicio de sesión.
      *
      * Valida las credenciales ('email' y 'password')
-     *     
-     * @param  \Illuminate\Http\Request  $request
+     *
      * @return \Illuminate\Http\RedirectResponse
      */
-    
     public function funcion_login(Request $request)
     {
         // Validar los datos del formulario
@@ -36,15 +33,16 @@ class LoginController extends Controller
             'password' => 'required',
         ], [
             'email.required' => 'El email es obligatorio.',
-            'email.email'    => 'El email no tiene un formato válido.',
+            'email.email' => 'El email no tiene un formato válido.',
             'password.required' => 'La contraseña es obligatoria.',
         ]);
 
         // Se verifica email/password (true si ok)
         if (Auth::attempt($credentials)) {
-            //Si ok--> se regenera sesión (se anota que está autenticado en la sesión).
+            // Si ok--> se regenera sesión (se anota que está autenticado en la sesión).
             $request->session()->regenerate();
-            //Redireccionamos a la página principal de la zona autenticada
+
+            // Redireccionamos a la página principal de la zona autenticada
             return redirect()->intended(route('zonaprivada'));
         }
 
@@ -59,7 +57,6 @@ class LoginController extends Controller
      *
      * Ejecuta 'Auth::logout()', invalida la sesión y regenera el token CSRF y redirige a la zona pública.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\RedirectResponse
      */
     public function funcion_logout(Request $request)

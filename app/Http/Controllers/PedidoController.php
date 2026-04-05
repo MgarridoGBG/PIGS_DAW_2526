@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Enums\EstadoPedido;
+use App\Models\Item;
 use App\Models\Pedido;
 use App\Models\User;
-use App\Models\Item;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use App\Enums\EstadoPedido;
 
 /**
  * Controlador de Pedidos
@@ -16,32 +16,30 @@ use App\Enums\EstadoPedido;
  * Mostrar, listar, filtrar, modificar y borrar pedidos,
  * así como de calcular totales y detectar pedidos "fantasma" (sin items).
  */
-
 class PedidoController extends Controller
 {
-
     /**
      * Muestra el detalle de un pedido con sus items y calcula totales.
-     *    
-     * @param int $id ID del pedido
+     *
+     * @param  int  $id  ID del pedido
      * @return \Illuminate\View\View Vista parcial con los datos del pedido o vista de error
      */
     public function verDetallePedido($id)
     {
         // Carga el pedido por su id y el role de su user y verifica si existe
         $pedido = Pedido::with('user.role')->find($id);
-        if (!$pedido) {
+        if (! $pedido) {
             return view('errores.error', [
-                'mensaje' => 'Pedido no encontrado'
+                'mensaje' => 'Pedido no encontrado',
             ]);
         }
 
         // Verificar que el pedido pertenece al usuario autenticado, o el usuario es admin/empleado
         $userRole = Auth::check() && Auth::user()->role ? Auth::user()->role->nombre_role : null;
         $userEsAdminOEmpleado = in_array($userRole, ['admin', 'empleado'], true);
-        if (!($pedido->user_id == Auth::id() || $userEsAdminOEmpleado)) {
+        if (! ($pedido->user_id == Auth::id() || $userEsAdminOEmpleado)) {
             return view('errores.error', [
-                'mensaje' => 'No tiene permiso para ver este pedido'
+                'mensaje' => 'No tiene permiso para ver este pedido',
             ]);
         }
 
@@ -52,6 +50,7 @@ class PedidoController extends Controller
         $items = $items->map(function ($item) {
             $cantidad = $item->cantidad ?? 1;
             $item->precio_total = round(($item->precio ?? 0) * $cantidad, 2);
+
             return $item;
         });
 
@@ -61,14 +60,14 @@ class PedidoController extends Controller
         return view('parciales.pedidodetallado', [
             'pedido' => $pedido,
             'items' => $items,
-            'precioPedido' => $precioPedido
+            'precioPedido' => $precioPedido,
         ]);
     }
 
     /**
      * Elimina un pedido por su ID.
      *
-     * @param int $id ID del pedido a eliminar
+     * @param  int  $id  ID del pedido a eliminar
      * @return \Illuminate\View\View
      */
     public function borrarPedido($id)
@@ -79,7 +78,7 @@ class PedidoController extends Controller
             $eliminado = $pedido->delete();
             if ($eliminado) {
                 return view('errores.exito', [
-                    'mensaje' => "Pedido con ID:{$id} eliminado correctamente."
+                    'mensaje' => "Pedido con ID:{$id} eliminado correctamente.",
                 ]);
             }
         }
@@ -95,7 +94,8 @@ class PedidoController extends Controller
     public function listarPedidos()
     {
         $pedidos = Pedido::paginate(15);
-        $mensaje = "Encontrados " . $pedidos->total() . " pedidos en la base de datos";
+        $mensaje = 'Encontrados '.$pedidos->total().' pedidos en la base de datos';
+
         return view('parciales.listados.listarpedidos', compact('pedidos', 'mensaje'));
     }
 
@@ -103,7 +103,7 @@ class PedidoController extends Controller
      * Calcula el precio total de un pedido sumando el precio*cantidad
      * de cada item.
      *
-     * @param int $pedido_id ID del pedido
+     * @param  int  $pedido_id  ID del pedido
      * @return float Precio total redondeado a 2 decimales
      */
     public function calcularPrecioPedido($pedido_id)
@@ -111,7 +111,7 @@ class PedidoController extends Controller
         // Obtener el pedido con sus items
         $pedido = Pedido::with('items')->find($pedido_id);
 
-        if (!$pedido) {
+        if (! $pedido) {
             return 0;
         }
 
@@ -124,13 +124,13 @@ class PedidoController extends Controller
 
             $precioPedido += $precioTotal;
         }
+
         return round($precioPedido, 2);
     }
 
     /**
      * Filtra la lista de pedidos según parámetros de la petición.
      *
-     * @param \Illuminate\Http\Request $peticion
      * @return \Illuminate\View\View
      */
     public function filtrarPedidos(Request $peticion)
@@ -145,7 +145,7 @@ class PedidoController extends Controller
             })
             ->when($peticion->filled('email_usuario'), function ($consulta) use ($peticion) {
                 return $consulta->whereHas('user', function ($subConsulta) use ($peticion) {
-                    $subConsulta->where('email', 'like', '%' . $peticion->email_usuario . '%');
+                    $subConsulta->where('email', 'like', '%'.$peticion->email_usuario.'%');
                 });
             })
             ->when($peticion->filled('estadoPedido'), function ($consulta) use ($peticion) {
@@ -157,14 +157,15 @@ class PedidoController extends Controller
             ->paginate(15)
             ->appends($peticion->except('page'));
 
-        $mensaje = "Encontrados " . $pedidos->total() . " pedidos en la base de datos según los filtros aplicados";
+        $mensaje = 'Encontrados '.$pedidos->total().' pedidos en la base de datos según los filtros aplicados';
+
         return view('parciales.listados.listarpedidos', compact('pedidos', 'mensaje'));
     }
 
     /**
      * Muestra el formulario para editar un pedido.
      *
-     * @param int $id ID del pedido
+     * @param  int  $id  ID del pedido
      * @return \Illuminate\View\View
      */
     public function mostrarFormEditarPedido($id)
@@ -175,7 +176,7 @@ class PedidoController extends Controller
 
         return view('administracion.formularios.formeditarpedido', [
             'pedido' => $pedido,
-            'estados' => $estados
+            'estados' => $estados,
         ]);
     }
 
@@ -185,8 +186,7 @@ class PedidoController extends Controller
      * Valida la entrada, actualiza campos opcionales, añade items desde
      * la sesión si existen y realiza los cambios con una transacción.
      *
-     * @param \Illuminate\Http\Request $peticion
-     * @param int $id ID del pedido a modificar
+     * @param  int  $id  ID del pedido a modificar
      * @return \Illuminate\View\View
      */
     public function procesarFormEditarPedido(Request $peticion, $id)
@@ -196,7 +196,7 @@ class PedidoController extends Controller
         // Validar datos del formulario
         $datosValidados = $peticion->validate([
             'email_usuario' => 'nullable|email|exists:users,email',
-            'estado_pedido' => 'nullable|in:' . implode(',', EstadoPedido::values()),
+            'estado_pedido' => 'nullable|in:'.implode(',', EstadoPedido::values()),
             'fecha_pedido' => 'nullable|date',
         ], [
             'email_usuario.email' => 'El campo email debe ser una dirección de correo válida.',
@@ -224,9 +224,9 @@ class PedidoController extends Controller
 
             // Añadir items del carrito si existen en sesión
             $carrito = session('Carrito', []);
-            if (!empty($carrito)) {
+            if (! empty($carrito)) {
                 foreach ($carrito as $itemCarrito) {
-                    $item = new Item();
+                    $item = new Item;
                     $item->pedido_id = $pedido->id;
                     $item->fotografia_id = $itemCarrito['fotografia_id'] ?? null;
                     $item->formato_id = $itemCarrito['formato_id'] ?? null;
@@ -234,8 +234,9 @@ class PedidoController extends Controller
                     $item->precio = $itemCarrito['precio'] ?? 0;
                     $item->cantidad = $itemCarrito['cantidad'] ?? 1;
 
-                    if (!$item->save()) {
+                    if (! $item->save()) {
                         DB::rollBack();
+
                         return view('errores.error', ['mensaje' => 'Se han producido errores al añadir items']);
                     }
                 }
@@ -248,13 +249,16 @@ class PedidoController extends Controller
 
             if ($guardado) {
                 DB::commit();
+
                 return view('errores.exito', ['mensaje' => "Pedido con ID {$id} correctamente modificado"]);
             } else {
                 DB::rollBack();
+
                 return view('errores.error', ['mensaje' => 'Error en la modificación de datos']);
             }
         } catch (\Exception $excepcion) {
             DB::rollBack();
+
             return view('errores.error', ['mensaje' => "No se ha podido modificar el pedido con ID {$id}"]);
         }
     }
@@ -269,7 +273,7 @@ class PedidoController extends Controller
         $pedidos = Pedido::doesntHave('items')->paginate(15);
 
         $total = $pedidos->total();
-        $mensaje = $total > 0 ? "Pedidos fantasma encontrados: {$total}" : "No se han encontrado pedidos fantasma.";
+        $mensaje = $total > 0 ? "Pedidos fantasma encontrados: {$total}" : 'No se han encontrado pedidos fantasma.';
 
         return view('parciales.listados.listarpedidos', compact('pedidos', 'mensaje'));
     }

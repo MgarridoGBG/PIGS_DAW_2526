@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Model;
 class Role extends Model
 {
     use HasFactory;
+
     /** Campos asignables */
     protected $fillable = ['nombre_role'];
 

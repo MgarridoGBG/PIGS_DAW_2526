@@ -4,10 +4,9 @@ namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-
 class EtiquetaFactory extends Factory
 {
-     /**
+    /**
      * Factoria para el modelo Cita.
      *
      * @var string

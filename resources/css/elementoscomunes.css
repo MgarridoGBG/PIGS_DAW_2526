@@ -127,6 +127,12 @@ button:hover, .btn-estandar:hover {
     justify-content: center;
 }
 
+.spinner-img {
+    background-color: var(--color-fondo);
+    width: 50px;
+    height: 50px;
+}
+
 
 /* botones pequeños en vista móvil */
 @media (max-width: 768px) {
@@ -134,3 +140,4 @@ button:hover, .btn-estandar:hover {
         padding: 4px 8px;
     }
 }
+

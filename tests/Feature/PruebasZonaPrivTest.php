@@ -16,16 +16,17 @@ class PruebasZonaPrivTest extends TestCase
     private function crearUsuarioConRole(string $nombreRole): User
     {
         $role = Role::factory()->create(['nombre_role' => $nombreRole]);
+
         return User::factory()->create(['role_id' => $role->id]);
     }
 
     // Acceso a /zonaprivada sin autenticar
-  
+
     /**
      * Un usuario NO autenticado que accede a /zonaprivada
      * es redirigido a /login (status 302).
      */
-    public function testNoAutenticadoRedirige(): void
+    public function test_no_autenticado_redirige(): void
     {
         $respuesta = $this->get(route('zonaprivada'));
 
@@ -37,7 +38,7 @@ class PruebasZonaPrivTest extends TestCase
      * Un usuario NO autenticado que sigue la redirección
      * llega al formulario de login (status 200).
      */
-    public function testNoAutenticadoLlegaALogin(): void
+    public function test_no_autenticado_llega_a_login(): void
     {
         $respuesta = $this->followingRedirects()->get(route('zonaprivada'));
 
@@ -46,12 +47,12 @@ class PruebasZonaPrivTest extends TestCase
     }
 
     // Acceso a /zonaprivada autenticado
-    
+
     /**
      * Un usuario autenticado accede correctamente
      * a la zona privada (status 200, vista zonaprivada.privada).
      */
-    public function testAutenticadoAccede(): void
+    public function test_autenticado_accede(): void
     {
         $usuario = $this->crearUsuarioConRole(NombreRole::CLIENTE->value);
 
@@ -65,7 +66,7 @@ class PruebasZonaPrivTest extends TestCase
      * La zona privada carga los datos del usuario autenticado
      * y los pasa a la vista correctamente.
      */
-    public function testZonaPrivadaRecibeDatosUser(): void
+    public function test_zona_privada_recibe_datos_user(): void
     {
         $usuario = $this->crearUsuarioConRole(NombreRole::CLIENTE->value);
 

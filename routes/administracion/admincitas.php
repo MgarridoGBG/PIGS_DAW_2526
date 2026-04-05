@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\CitaController;
 use App\Http\Controllers\Api\CitasCalendarController;
+use App\Http\Controllers\CitaController;
+use Illuminate\Support\Facades\Route;
 
 // GESTION DE CITAS
 

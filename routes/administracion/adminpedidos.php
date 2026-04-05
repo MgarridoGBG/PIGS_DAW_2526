@@ -1,6 +1,7 @@
 <?php
-use Illuminate\Support\Facades\Route;
+
 use App\Http\Controllers\PedidoController;
+use Illuminate\Support\Facades\Route;
 
 // GESTION DE PEDIDOS
 // Ruta para listar pedidos, solo accesible para roles con privilegio 'admin_basico'

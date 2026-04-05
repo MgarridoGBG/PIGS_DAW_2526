@@ -10,12 +10,12 @@ class PruebasSoporteTest extends TestCase
 {
     use RefreshDatabase;
 
-        // borrarSoporte
+    // borrarSoporte
 
     /**
      * Borrar un soporte con ID inexistente devuelve la vista errores.error.
      */
-    public function testFalloIdNoExiste(): void
+    public function test_fallo_id_no_existe(): void
     {
         $respuesta = $this->withoutMiddleware()
             ->delete(route('borrarsoporte', 99999));
@@ -24,12 +24,12 @@ class PruebasSoporteTest extends TestCase
         $respuesta->assertViewIs('errores.error');
     }
 
-        // procesarFormEditarSoporte
+    // procesarFormEditarSoporte
 
     /**
      * nombre_soport con más de 50 caracteres falla la validación.
      */
-    public function testFalloNombreLargo(): void
+    public function test_fallo_nombre_largo(): void
     {
         $soporte = Soporte::factory()->create();
 
@@ -44,7 +44,7 @@ class PruebasSoporteTest extends TestCase
     /**
      * disponibilidad con valor no booleano falla la validación.
      */
-    public function testFalloDisponibilidadNoBool(): void
+    public function test_fallo_disponibilidad_no_bool(): void
     {
         $soporte = Soporte::factory()->create();
 
@@ -59,7 +59,7 @@ class PruebasSoporteTest extends TestCase
     /**
      * precio negativo falla la validación.
      */
-    public function testFalloPrecioNegativo(): void
+    public function test_fallo_precio_negativo(): void
     {
         $soporte = Soporte::factory()->create();
 
@@ -74,7 +74,7 @@ class PruebasSoporteTest extends TestCase
     /**
      * precio no numérico falla la validación.
      */
-    public function testFalloPrecioNoNumerico(): void
+    public function test_fallo_precio_no_numerico(): void
     {
         $soporte = Soporte::factory()->create();
 
@@ -86,12 +86,12 @@ class PruebasSoporteTest extends TestCase
         $respuesta->assertSessionHasErrors(['precio']);
     }
 
-        // filtrarSoportes
+    // filtrarSoportes
 
     /**
      * Filtrar por nombre devuelve solo los soportes que coinciden.
      */
-    public function testFiltrarPorNombre(): void
+    public function test_filtrar_por_nombre(): void
     {
         Soporte::factory()->create(['nombre_soport' => 'Canvas Premium']);
         Soporte::factory()->create(['nombre_soport' => 'Papel Mate']);
@@ -113,7 +113,7 @@ class PruebasSoporteTest extends TestCase
     /**
      * Filtrar por precio mínimo devuelve solo los soportes con precio mayor o igual.
      */
-    public function testFiltrarPorPrecioMinimo(): void
+    public function test_filtrar_por_precio_minimo(): void
     {
         Soporte::factory()->create(['precio' => 10.00]);
         Soporte::factory()->create(['precio' => 50.00]);
@@ -133,7 +133,7 @@ class PruebasSoporteTest extends TestCase
     /**
      * Filtrar por precio máximo devuelve solo los soportes con precio menor o igual.
      */
-    public function testFiltrarPorPrecioMaximo(): void
+    public function test_filtrar_por_precio_maximo(): void
     {
         Soporte::factory()->create(['precio' => 10.00]);
         Soporte::factory()->create(['precio' => 50.00]);
@@ -150,18 +150,18 @@ class PruebasSoporteTest extends TestCase
         }
     }
 
-        // registrarNuevoSoporte
+    // registrarNuevoSoporte
 
     /**
      * nombre_soport con más de 50 caracteres falla la validación al crear.
      */
-    public function testFalloNuevoNombreLargo(): void
+    public function test_fallo_nuevo_nombre_largo(): void
     {
         $respuesta = $this->withoutMiddleware()
             ->post(route('nuevosoporte'), [
-                'nombre_soport'  => str_repeat('a', 51),
+                'nombre_soport' => str_repeat('a', 51),
                 'disponibilidad' => 1,
-                'precio'         => 25.00,
+                'precio' => 25.00,
             ]);
 
         $respuesta->assertSessionHasErrors(['nombre_soport']);
@@ -170,13 +170,13 @@ class PruebasSoporteTest extends TestCase
     /**
      * disponibilidad con valor no booleano falla la validación al crear.
      */
-    public function testFalloNuevoDisponibilidadNoBool(): void
+    public function test_fallo_nuevo_disponibilidad_no_bool(): void
     {
         $respuesta = $this->withoutMiddleware()
             ->post(route('nuevosoporte'), [
-                'nombre_soport'  => 'Soporte Válido',
+                'nombre_soport' => 'Soporte Válido',
                 'disponibilidad' => 'invalido',
-                'precio'         => 25.00,
+                'precio' => 25.00,
             ]);
 
         $respuesta->assertSessionHasErrors(['disponibilidad']);
@@ -185,13 +185,13 @@ class PruebasSoporteTest extends TestCase
     /**
      * precio negativo falla la validación al crear.
      */
-    public function testFalloNuevoPrecioNegativo(): void
+    public function test_fallo_nuevo_precio_negativo(): void
     {
         $respuesta = $this->withoutMiddleware()
             ->post(route('nuevosoporte'), [
-                'nombre_soport'  => 'Soporte Válido',
+                'nombre_soport' => 'Soporte Válido',
                 'disponibilidad' => 1,
-                'precio'         => -10.00,
+                'precio' => -10.00,
             ]);
 
         $respuesta->assertSessionHasErrors(['precio']);
@@ -200,13 +200,13 @@ class PruebasSoporteTest extends TestCase
     /**
      * precio no numérico falla la validación al crear.
      */
-    public function testFalloNuevoPrecioNoNumerico(): void
+    public function test_fallo_nuevo_precio_no_numerico(): void
     {
         $respuesta = $this->withoutMiddleware()
             ->post(route('nuevosoporte'), [
-                'nombre_soport'  => 'Soporte Válido',
+                'nombre_soport' => 'Soporte Válido',
                 'disponibilidad' => 1,
-                'precio'         => 'noesunnumero',
+                'precio' => 'noesunnumero',
             ]);
 
         $respuesta->assertSessionHasErrors(['precio']);

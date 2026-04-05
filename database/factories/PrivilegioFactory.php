@@ -4,11 +4,11 @@ namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 
- /**
-     * Factoria para el modelo Privilegio.
-     *
-     * @var string
-     */
+/**
+ * Factoria para el modelo Privilegio.
+ *
+ * @var string
+ */
 class PrivilegioFactory extends Factory
 {
     protected $model = \App\Models\Privilegio::class;

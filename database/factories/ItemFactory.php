@@ -4,17 +4,15 @@ namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-
 class ItemFactory extends Factory
 {
-     /**
+    /**
      * Factoria para el modelo Item.
      *
      * @var string
      */
     protected $model = \App\Models\Item::class;
 
-    
     public function definition(): array
     {
         return [ // Genera una cantidad aleatoria entre 1 y 10, un precio aleatorio con dos decimales entre 1 y 100, y asocia un pedido, formato, soporte y fotografía creados por sus respectivas fábricas.

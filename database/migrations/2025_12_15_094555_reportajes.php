@@ -1,9 +1,9 @@
 <?php
 
+use App\Enums\TipoReportaje;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-use App\Enums\TipoReportaje;
 
 return new class extends Migration
 {
@@ -23,7 +23,7 @@ return new class extends Migration
                 ->constrained('users')
                 ->onUpdate('cascade')
                 ->onDelete('set null');
-                // Los reportajes se mantienen aunque se borre el usuario.
+            // Los reportajes se mantienen aunque se borre el usuario.
             $table->timestamps();
         });
     }

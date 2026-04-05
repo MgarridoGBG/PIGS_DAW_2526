@@ -2,14 +2,14 @@
 
 namespace Database\Factories;
 
-use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Enums\TipoReportaje;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
- /**
-     * Factoria para el modelo Reportaje.
-     *
-     * @var string
-     */
+/**
+ * Factoria para el modelo Reportaje.
+ *
+ * @var string
+ */
 class ReportajeFactory extends Factory
 {
     protected $model = \App\Models\Reportaje::class;

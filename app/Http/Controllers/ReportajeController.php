@@ -2,16 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Reportaje;
-use App\Models\Fotografia;
-use App\Enums\TipoReportaje;
-use Illuminate\Validation\Rule;
-use App\Models\User;
 use App\Enums\ExtensionesFotos;
-
+use App\Enums\TipoReportaje;
+use App\Models\Fotografia;
+use App\Models\Reportaje;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\Rule;
 
 /**
  * Controlador de Reportajes
@@ -22,7 +21,6 @@ use Illuminate\Support\Facades\DB;
  */
 class ReportajeController extends Controller
 {
-
     /**
      * Lista todos los reportajes paginados.
      *
@@ -31,7 +29,8 @@ class ReportajeController extends Controller
     public function listarReportajes()
     {
         $reportajes = Reportaje::paginate(15);
-        $mensaje = "Encontrados " . $reportajes->total() . " reportajes en la base de datos";
+        $mensaje = 'Encontrados '.$reportajes->total().' reportajes en la base de datos';
+
         return view('parciales.listados.listarreportajes', compact('reportajes', 'mensaje'));
     }
 
@@ -40,16 +39,17 @@ class ReportajeController extends Controller
      *
      * Carga el reportaje y los tipos disponibles desde el enum 'TipoReportaje'.
      *
-     * @param int $id ID del reportaje
+     * @param  int  $id  ID del reportaje
      * @return \Illuminate\View\View
      */
     public function mostrarFormEditarReportaje($id)
     {
         $reportaje = Reportaje::findOrFail($id);
         $tipos = TipoReportaje::values();
+
         return view('administracion.formularios.formeditarreportaje', [
             'reportaje' => $reportaje,
-            'tipos' => $tipos
+            'tipos' => $tipos,
         ]);
     }
 
@@ -59,25 +59,25 @@ class ReportajeController extends Controller
      * - Comprueba la existencia de la carpeta en storage.
      * - Solicita confirmación si es necesario.
      *
-     * @param int $id ID del reportaje a eliminar
-     * @return \Illuminate\View\View 
+     * @param  int  $id  ID del reportaje a eliminar
+     * @return \Illuminate\View\View
      */
     public function borrarReportaje($id)
     {
         $reportaje = Reportaje::find($id);
-        if (!$reportaje) {
+        if (! $reportaje) {
             return view('errores.error', ['mensaje' => "No se ha encontrado el reportaje con ID:{$id}"]);
         }
 
         // Verificar si existe la carpeta en storage/app/private/fotosreportajes
-        $rutaCarpeta = storage_path('app/private/fotosreportajes/' . $reportaje->codigo);
+        $rutaCarpeta = storage_path('app/private/fotosreportajes/'.$reportaje->codigo);
         $existeCarpeta = file_exists($rutaCarpeta);
 
         // Si la carpeta existe y no se ha indicado acción, mostrar confirmación
-        if ($existeCarpeta && !request()->filled('accion_carpeta')) {
+        if ($existeCarpeta && ! request()->filled('accion_carpeta')) {
             return view('administracion.confirmaciones.confirmarborrarcarpeta', [
                 'reportaje' => $reportaje,
-                'codigo' => $reportaje->codigo
+                'codigo' => $reportaje->codigo,
             ]);
         }
 
@@ -93,10 +93,10 @@ class ReportajeController extends Controller
                 // Función recursiva para eliminar carpeta y su contenido
                 function eliminarDirectorio($dir)
                 {
-                    if (!file_exists($dir)) {
+                    if (! file_exists($dir)) {
                         return true;
                     }
-                    if (!is_dir($dir)) {
+                    if (! is_dir($dir)) {
                         return unlink($dir);
                     }
                     foreach (scandir($dir) as $item) {
@@ -104,16 +104,17 @@ class ReportajeController extends Controller
                         if ($item == '.' || $item == '..') { // Saltar . y .. para evitar problemas de recursión infinita y errores de eliminación
                             continue;
                         }
-                        if (!eliminarDirectorio($dir . DIRECTORY_SEPARATOR . $item)) {
+                        if (! eliminarDirectorio($dir.DIRECTORY_SEPARATOR.$item)) {
                             return false;
                         }
                     }
+
                     return rmdir($dir);
                 }
 
                 eliminarDirectorio($rutaCarpeta);
             } catch (\Exception $e) {
-                return view('errores.error', ['mensaje' => 'Error al eliminar la carpeta: ' . $e->getMessage()]);
+                return view('errores.error', ['mensaje' => 'Error al eliminar la carpeta: '.$e->getMessage()]);
             }
         }
 
@@ -130,10 +131,11 @@ class ReportajeController extends Controller
                 } elseif ($existeCarpeta && request()->input('accion_carpeta') === 'no_eliminar') {
                     $mensajeExtra = ' La carpeta ha sido conservada.';
                 }
-                return view('errores.exito', ['mensaje' => "Reportaje {$codigo} eliminado con éxito." . $mensajeExtra]);
+
+                return view('errores.exito', ['mensaje' => "Reportaje {$codigo} eliminado con éxito.".$mensajeExtra]);
             }
         } catch (\Exception $excepcion) {
-            return view('errores.error', ['mensaje' => "Error al eliminar el reportaje: " . $excepcion->getMessage()]);
+            return view('errores.error', ['mensaje' => 'Error al eliminar el reportaje: '.$excepcion->getMessage()]);
         }
 
         return view('errores.error', ['mensaje' => "No se ha podido eliminar el reportaje con ID:{$id}"]);
@@ -145,8 +147,7 @@ class ReportajeController extends Controller
      * Valida la petición, gestiona el renombrado de la carpeta
      * asociada si cambia el código y actualiza el modelo.
      *
-     * @param \Illuminate\Http\Request $peticion
-     * @param int $id ID del reportaje
+     * @param  int  $id  ID del reportaje
      * @return \Illuminate\View\View
      */
     public function procesarFormEditarReportaje(Request $peticion, $id)
@@ -166,7 +167,7 @@ class ReportajeController extends Controller
             'descripcion' => 'nullable|string|max:250',
             'fecha_report' => 'nullable|date',
             'publico' => 'nullable|boolean',
-            'accion_carpeta' => 'nullable|in:renombrar,no_renombrar,cancelar'
+            'accion_carpeta' => 'nullable|in:renombrar,no_renombrar,cancelar',
         ], [
             'tipo.string' => 'El tipo debe ser texto.',
             'tipo.max' => 'El tipo no debe exceder los :max caracteres.',
@@ -176,7 +177,7 @@ class ReportajeController extends Controller
             'descripcion.max' => 'La descripción no debe exceder los :max caracteres.',
             'fecha_report.date' => 'La fecha debe ser una fecha válida.',
             'email_usuario.exists' => 'El usuario seleccionado no existe.',
-            'publico.boolean' => 'El campo público debe ser válido.'
+            'publico.boolean' => 'El campo público debe ser válido.',
         ]);
 
         // Verificar si se está cambiando el código
@@ -186,18 +187,18 @@ class ReportajeController extends Controller
 
         if ($cambiaCodigo) {
             // Verificar si ya existe una carpeta con el nuevo código
-            $rutaCarpetaNueva = storage_path('app/private/fotosreportajes/' . $codigoNuevo);
+            $rutaCarpetaNueva = storage_path('app/private/fotosreportajes/'.$codigoNuevo);
             if (file_exists($rutaCarpetaNueva)) {
                 return view('errores.error', ['mensaje' => 'Ya existe el código de reportaje']);
             }
 
             // Si no se ha indicado acción, mostrar confirmación
-            if (!$peticion->filled('accion_carpeta')) {
+            if (! $peticion->filled('accion_carpeta')) {
                 return view('administracion.confirmaciones.confirmarrenomcarpeta', [
                     'reportaje' => $reportaje,
                     'datosReportaje' => $datosValidados,
                     'codigoAntiguo' => $codigoAntiguo,
-                    'codigoNuevo' => $codigoNuevo
+                    'codigoNuevo' => $codigoNuevo,
                 ]);
             }
 
@@ -209,12 +210,12 @@ class ReportajeController extends Controller
 
             // Renombrar carpeta si es necesario
             if ($peticion->input('accion_carpeta') === 'renombrar') {
-                $rutaCarpetaAntigua = storage_path('app/private/fotosreportajes/' . $codigoAntiguo);
+                $rutaCarpetaAntigua = storage_path('app/private/fotosreportajes/'.$codigoAntiguo);
                 if (file_exists($rutaCarpetaAntigua)) {
                     try {
                         rename($rutaCarpetaAntigua, $rutaCarpetaNueva);
                     } catch (\Exception $e) {
-                        return view('errores.error', ['mensaje' => 'Error al renombrar la carpeta: ' . $e->getMessage()]);
+                        return view('errores.error', ['mensaje' => 'Error al renombrar la carpeta: '.$e->getMessage()]);
                     }
                 }
             }
@@ -256,7 +257,8 @@ class ReportajeController extends Controller
                 } elseif ($cambiaCodigo && $peticion->input('accion_carpeta') === 'no_renombrar') {
                     $mensajeExtra = ' La carpeta no ha sido renombrada.';
                 }
-                return view('errores.exito', ['mensaje' => "Reportaje con ID {$id} correctamente modificado." . $mensajeExtra]);
+
+                return view('errores.exito', ['mensaje' => "Reportaje con ID {$id} correctamente modificado.".$mensajeExtra]);
             } else {
                 return view('errores.error', ['mensaje' => 'Error en la modificación de datos']);
             }
@@ -269,7 +271,6 @@ class ReportajeController extends Controller
      * Filtra reportajes según criterios de la petición y devuelve
      * una lista paginada.
      *
-     * @param \Illuminate\Http\Request $peticion
      * @return \Illuminate\View\View
      */
     public function filtrarReportajes(Request $peticion)
@@ -284,17 +285,17 @@ class ReportajeController extends Controller
             })
             ->when($peticion->filled('email_usuario'), function ($consulta) use ($peticion) {
                 return $consulta->whereHas('user', function ($subConsulta) use ($peticion) {
-                    $subConsulta->where('email', 'like', '%' . $peticion->email_usuario . '%');
+                    $subConsulta->where('email', 'like', '%'.$peticion->email_usuario.'%');
                 });
             })
             ->when($peticion->filled('tipo'), function ($consulta) use ($peticion) {
                 return $consulta->where('tipo', $peticion->tipo);
             })
             ->when($peticion->filled('codigo'), function ($consulta) use ($peticion) {
-                return $consulta->where('codigo', 'like', '%' . $peticion->codigo . '%');
+                return $consulta->where('codigo', 'like', '%'.$peticion->codigo.'%');
             })
             ->when($peticion->filled('descripcion'), function ($consulta) use ($peticion) {
-                return $consulta->where('descripcion', 'like', '%' . $peticion->descripcion . '%');
+                return $consulta->where('descripcion', 'like', '%'.$peticion->descripcion.'%');
             })
             ->when($peticion->filled('fecha_report'), function ($consulta) use ($peticion) {
                 return $consulta->where('fecha_report', $peticion->fecha_report);
@@ -305,7 +306,8 @@ class ReportajeController extends Controller
             ->paginate(15)
             ->appends($peticion->except('page'));
 
-        $mensaje = "Encontrados " . $reportajes->total() . " reportajes en la base de datos según los filtros aplicados";
+        $mensaje = 'Encontrados '.$reportajes->total().' reportajes en la base de datos según los filtros aplicados';
+
         return view('parciales.listados.listarreportajes', compact('reportajes', 'mensaje'));
     }
 
@@ -317,6 +319,7 @@ class ReportajeController extends Controller
     public function mostrarFormNuevoReportaje()
     {
         $tipos = TipoReportaje::values();
+
         return view('administracion.formularios.formnuevoreportaje', compact('tipos'));
     }
 
@@ -324,7 +327,6 @@ class ReportajeController extends Controller
      * Registra un nuevo reportaje, crea la carpeta en storage si se solicita
      * y añade fotografías encontradas en la carpeta al reportaje.
      *
-     * @param \Illuminate\Http\Request $peticion
      * @return \Illuminate\View\View
      */
     public function registrarNuevoReportaje(Request $peticion)
@@ -338,7 +340,7 @@ class ReportajeController extends Controller
             'email_usuario' => 'required|exists:users,email',
             'publico' => 'nullable|boolean',
             'accion_carpeta' => 'nullable|in:crear,no_crear,cancelar',
-            'accion_fotos' => 'nullable|in:si,no,cancelar'
+            'accion_fotos' => 'nullable|in:si,no,cancelar',
         ], [
             'tipo.required' => 'El tipo de reportaje es obligatorio.',
             'tipo.string' => 'El tipo debe ser texto.',
@@ -353,11 +355,11 @@ class ReportajeController extends Controller
             'fecha_report.date' => 'La fecha debe ser una fecha válida.',
             'email_usuario.required' => 'El usuario es obligatorio.',
             'email_usuario.exists' => 'El usuario seleccionado no existe.',
-            'publico.boolean' => 'El campo público debe ser válido.'
+            'publico.boolean' => 'El campo público debe ser válido.',
         ]);
 
         // 2. Verificar si existe la carpeta en storage/app/private/fotosreportajes
-        $rutaCarpeta = storage_path('app/private/fotosreportajes/' . $datosValidados['codigo']);
+        $rutaCarpeta = storage_path('app/private/fotosreportajes/'.$datosValidados['codigo']);
         $existeCarpeta = file_exists($rutaCarpeta);
 
         // Si la carpeta existe, verificar si hay fotos dentro
@@ -365,12 +367,12 @@ class ReportajeController extends Controller
             $fotosEncontradas = $this->verificarFotos($rutaCarpeta);
 
             // Si hay fotos y no se ha indicado acción, preguntar al usuario
-            if (!empty($fotosEncontradas) && !$peticion->filled('accion_fotos')) {
+            if (! empty($fotosEncontradas) && ! $peticion->filled('accion_fotos')) {
                 return view('administracion.confirmaciones.confirmaranadirfotos', [
                     'datosReportaje' => $datosValidados,
                     'codigo' => $datosValidados['codigo'],
                     'fotos' => $fotosEncontradas,
-                    'cantidadFotos' => count($fotosEncontradas)
+                    'cantidadFotos' => count($fotosEncontradas),
                 ]);
             }
 
@@ -382,10 +384,10 @@ class ReportajeController extends Controller
         }
 
         // Si la carpeta no existe y no se ha indicado acción, mostrar confirmación
-        if (!$existeCarpeta && !$peticion->filled('accion_carpeta')) {
+        if (! $existeCarpeta && ! $peticion->filled('accion_carpeta')) {
             return view('administracion.confirmaciones.confirmarcrearcarpeta', [
                 'datosReportaje' => $datosValidados,
-                'codigo' => $datosValidados['codigo']
+                'codigo' => $datosValidados['codigo'],
             ]);
         }
 
@@ -396,18 +398,18 @@ class ReportajeController extends Controller
         }
 
         // 3. Crear carpeta si es necesario
-        if (!$existeCarpeta && $peticion->input('accion_carpeta') === 'crear') {
+        if (! $existeCarpeta && $peticion->input('accion_carpeta') === 'crear') {
             try {
                 mkdir($rutaCarpeta, 0755, true);
             } catch (\Exception $e) {
-                return view('errores.error', ['mensaje' => 'Error al crear la carpeta: ' . $e->getMessage()]);
+                return view('errores.error', ['mensaje' => 'Error al crear la carpeta: '.$e->getMessage()]);
             }
         }
 
         // 4. Crear reportaje en la BD
         $usuario = User::where('email', $datosValidados['email_usuario'])->first();
         // Aunque la validación ya asegura que el usuario existe, es buena práctica verificarlo antes de usarlo
-        if (!$usuario) {
+        if (! $usuario) {
             return view('errores.error', ['mensaje' => 'No se ha encontrado el usuario con ese email.']);
         }
 
@@ -417,12 +419,12 @@ class ReportajeController extends Controller
             // Usamos una transacción para asegurar que la creación del reportaje y la asociación de fotos se realicen de forma correcta.
             $reportaje = DB::transaction(function () use ($datosValidados, $usuario, $añadirFotos, $rutaCarpeta) {
                 $reportaje = Reportaje::create([
-                    'tipo'=> $datosValidados['tipo'],
-                    'codigo'=> $datosValidados['codigo'],
-                    'descripcion'=> $datosValidados['descripcion'] ?? null,
-                    'fecha_report'=> $datosValidados['fecha_report'],
-                    'user_id'=> $usuario->id,
-                    'publico'=> $datosValidados['publico'] ?? 0
+                    'tipo' => $datosValidados['tipo'],
+                    'codigo' => $datosValidados['codigo'],
+                    'descripcion' => $datosValidados['descripcion'] ?? null,
+                    'fecha_report' => $datosValidados['fecha_report'],
+                    'user_id' => $usuario->id,
+                    'publico' => $datosValidados['publico'] ?? 0,
                 ]);
 
                 if ($añadirFotos) {
@@ -431,7 +433,7 @@ class ReportajeController extends Controller
                     foreach ($fotosEncontradas as $nombreFoto) {
                         Fotografia::create([
                             'nombre_foto' => $nombreFoto,
-                            'reportaje_id' => $reportaje->id
+                            'reportaje_id' => $reportaje->id,
                         ]);
                     }
                 }
@@ -440,7 +442,7 @@ class ReportajeController extends Controller
             });
 
             $mensajeExtra = '';
-            
+
             if ($añadirFotos) {
                 $totalFotos = count($this->verificarFotos($rutaCarpeta));
                 $mensajeExtra .= " Se han añadido {$totalFotos} fotografías al reportaje.";
@@ -448,17 +450,18 @@ class ReportajeController extends Controller
                 $mensajeExtra .= ' No se han añadido las fotografías existentes en la carpeta.';
             }
 
-            if (!$existeCarpeta && $peticion->input('accion_carpeta') === 'crear') {
+            if (! $existeCarpeta && $peticion->input('accion_carpeta') === 'crear') {
                 $mensajeExtra .= ' La carpeta ha sido creada.';
-            } elseif (!$existeCarpeta && $peticion->input('accion_carpeta') === 'no_crear') {
+            } elseif (! $existeCarpeta && $peticion->input('accion_carpeta') === 'no_crear') {
                 $mensajeExtra .= ' La carpeta no ha sido creada.';
             }
 
-            return view('errores.exito', ['mensaje' => "Reportaje '{$reportaje->codigo}' registrado con éxito." . $mensajeExtra]);
+            return view('errores.exito', ['mensaje' => "Reportaje '{$reportaje->codigo}' registrado con éxito.".$mensajeExtra]);
 
         } catch (\Exception $excepcion) {
             $mensajeExtra = ' Comprueba los nombres y formatos de las fotografías en la carpeta.';
-            return view('errores.error', ['mensaje' => 'No se ha podido crear el reportaje, algunas de las fotos no se han podido añadir.'. $mensajeExtra]);
+
+            return view('errores.error', ['mensaje' => 'No se ha podido crear el reportaje, algunas de las fotos no se han podido añadir.'.$mensajeExtra]);
         }
     }
 
@@ -466,8 +469,8 @@ class ReportajeController extends Controller
      * Verifica si existen archivos de imagen en una carpeta y devuelve sus nombres base
      * para su posible asociación a un reportaje. Solo se consideran archivos con extensiones
      * registradas en el enum ExtensionesFotos.
-     * 
-     * @param string $rutaCarpeta Ruta de la carpeta a verificar
+     *
+     * @param  string  $rutaCarpeta  Ruta de la carpeta a verificar
      * @return array Array con los nombres base de los archivos de imagen encontrados
      */
     public function verificarFotos($rutaCarpeta)
@@ -475,7 +478,7 @@ class ReportajeController extends Controller
         $nombresImagenes = [];
 
         // Verificar si la carpeta existe
-        if (!file_exists($rutaCarpeta) || !is_dir($rutaCarpeta)) {
+        if (! file_exists($rutaCarpeta) || ! is_dir($rutaCarpeta)) {
             return $nombresImagenes;
         }
 
@@ -491,7 +494,7 @@ class ReportajeController extends Controller
                 continue;
             }
 
-            $rutaCompleta = $rutaCarpeta . DIRECTORY_SEPARATOR . $archivo;
+            $rutaCompleta = $rutaCarpeta.DIRECTORY_SEPARATOR.$archivo;
 
             // Verificar que sea un archivo (no una carpeta)
             if (is_file($rutaCompleta)) {
@@ -520,10 +523,10 @@ class ReportajeController extends Controller
     public function buscarReportajesFantasma(Request $request)
     {
         // Petición es normal (no es Ajax): mostrar la página con el spinner; el contenido se carga vía AJAX
-        if (!$request->ajax()) {
+        if (! $request->ajax()) {
             return view('parciales.listados.listarreporfantasma');
         }
-        //Si la peticion no es normal (es petición AJAX), devolver la vista parcial con los datos
+        // Si la peticion no es normal (es petición AJAX), devolver la vista parcial con los datos
         $rutaBase = storage_path('app/private/fotosreportajes');
 
         // Obtener todos los reportajes de la BD
@@ -531,14 +534,15 @@ class ReportajeController extends Controller
 
         // Filtrar los que NO tienen carpeta asociada
         $fantasmas = $todosLosReportajes->filter(function ($reportaje) use ($rutaBase) {
-            $rutaCarpeta = $rutaBase . DIRECTORY_SEPARATOR . $reportaje->codigo;
-            return !file_exists($rutaCarpeta) || !is_dir($rutaCarpeta);
+            $rutaCarpeta = $rutaBase.DIRECTORY_SEPARATOR.$reportaje->codigo;
+
+            return ! file_exists($rutaCarpeta) || ! is_dir($rutaCarpeta);
         });
 
         $total = $fantasmas->count();
 
         // Paginación manual sobre la colección, he tenido que hacerla manual porque
-        //paginate() no existe en Collection, solo en Builder, y aquí ya tenemos la colección filtrada
+        // paginate() no existe en Collection, solo en Builder, y aquí ya tenemos la colección filtrada
         $paginaActual = LengthAwarePaginator::resolveCurrentPage();
         $porPagina = 15;
         $itemsPagina = $fantasmas->values()->slice(($paginaActual - 1) * $porPagina, $porPagina);
@@ -551,7 +555,8 @@ class ReportajeController extends Controller
         );
 
         // Mostrar mensaje con el número de reportajes fantasma encontrados y devolver la vista parcial
-        $mensaje = $total > 0 ? "Reportajes fantasma encontrados: {$total}" : "No se han encontrado reportajes fantasma.";
+        $mensaje = $total > 0 ? "Reportajes fantasma encontrados: {$total}" : 'No se han encontrado reportajes fantasma.';
+
         return view('parciales.listados.tablareporfantasma', compact('reportajes', 'mensaje'));
     }
 }

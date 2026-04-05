@@ -4,13 +4,12 @@ namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-
 class FotografiaFactory extends Factory
-/**
- * Factoria para el modelo Fotografia.
- *
- * @var string
- */
+    /**
+     * Factoria para el modelo Fotografia.
+     *
+     * @var string
+     */
 {
     protected $model = \App\Models\Fotografia::class;
 

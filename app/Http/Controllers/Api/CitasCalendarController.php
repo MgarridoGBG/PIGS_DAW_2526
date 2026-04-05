@@ -18,13 +18,11 @@ use Illuminate\Validation\ValidationException;
  */
 class CitasCalendarController extends Controller
 {
-
     /**
      * Devuelve las citas (ocupación) en el rango solicitado por FullCalendar. ('start' y 'end')
      * Valida el rango y retorna un array de citas.
      *
-     * @param  \Illuminate\Http\Request  $peticion
-     * @return \Illuminate\Support\Collection  Colección de citas formateadas para FullCalendar
+     * @return \Illuminate\Support\Collection Colección de citas formateadas para FullCalendar
      */
 
     // Devuelve ocupación (2 líneas por día) sin datos personales
@@ -32,21 +30,21 @@ class CitasCalendarController extends Controller
     {
         $datosCalendar = $peticion->validate([
             'start' => ['required', 'date'], // FullCalendar envía 'start' y 'end' como fechas ISO (ej: 2024-09-01)
-            'end'   => ['required', 'date', 'after_or_equal:start'], // Validamos que 'end' sea igual o posterior a 'start'
+            'end' => ['required', 'date', 'after_or_equal:start'], // Validamos que 'end' sea igual o posterior a 'start'
         ]);
 
         $citas = Cita::query()
             ->whereDate('fecha_cita', '>=', $datosCalendar['start']) // start inclusivo que es lo que FullCalendar envía
-            ->whereDate('fecha_cita', '<',  $datosCalendar['end']) // end exclusivo
+            ->whereDate('fecha_cita', '<', $datosCalendar['end']) // end exclusivo
             ->orderBy('fecha_cita')
             ->orderBy('turno')
             ->get(['id', 'fecha_cita', 'turno']);
 
-        return $citas->map(fn($cita) => [ // Formato necesario para FullCalendar
-            'id'     => $cita->id,
-            'start'  => $cita->fecha_cita->format('Y-m-d'), // FullCalendar espera fecha ISO (puedes incluir hora si no es allDay)
+        return $citas->map(fn ($cita) => [ // Formato necesario para FullCalendar
+            'id' => $cita->id,
+            'start' => $cita->fecha_cita->format('Y-m-d'), // FullCalendar espera fecha ISO (puedes incluir hora si no es allDay)
             'allDay' => true, // Si no quieres que se muestre como evento de día completo, ajusta esto y el formato de 'start'
-            'title'  => $cita->turno === TurnoCita::MANANA->value ? 'Mañana (ocupado)' : 'Tarde (ocupado)',
+            'title' => $cita->turno === TurnoCita::MANANA->value ? 'Mañana (ocupado)' : 'Tarde (ocupado)',
             'extendedProps' => [
                 'turno' => $cita->turno, // Puedes incluir más propiedades si las necesitas en el frontend
             ],
@@ -60,18 +58,17 @@ class CitasCalendarController extends Controller
      *
      * Retorna JSON con formato de cita para FullCalendar.
      *
-     * @param  \Illuminate\Http\Request  $peticion
-     * @throws \Illuminate\Validation\ValidationException
      * @return \Illuminate\Http\JsonResponse
+     *
+     * @throws \Illuminate\Validation\ValidationException
      */
-
     public function actualizarMiCita(Request $peticion)
     {
         $user = $peticion->user();
 
         $datosCalendar = $peticion->validate([
             'fecha' => ['required', 'date'],
-            'turno' => ['required', 'in:' . implode(',', TurnoCita::values())],
+            'turno' => ['required', 'in:'.implode(',', TurnoCita::values())],
         ]);
 
         // Si el turno está ocupado por OTRO, no se puede
@@ -101,10 +98,10 @@ class CitasCalendarController extends Controller
         }
 
         return response()->json([
-            'id'     => $cita->id,
-            'start'  => $cita->fecha_cita->format('Y-m-d'),
+            'id' => $cita->id,
+            'start' => $cita->fecha_cita->format('Y-m-d'),
             'allDay' => true,
-            'title'  => $cita->turno === TurnoCita::MANANA->value ? 'Mañana (ocupado)' : 'Tarde (ocupado)',
+            'title' => $cita->turno === TurnoCita::MANANA->value ? 'Mañana (ocupado)' : 'Tarde (ocupado)',
             'extendedProps' => ['turno' => $cita->turno],
         ]);
     }
@@ -113,16 +110,16 @@ class CitasCalendarController extends Controller
      * Cancela (elimina) la cita del usuario autenticado.
      *
      * Método: DELETE /api/micita
-     * 
-     * @param  \Illuminate\Http\Request  $peticion
+     *
      * @return \Illuminate\Http\Response (204 No Content)
      */
-
     public function cancelarMiCita(Request $peticion)
     {
         $cita = $peticion->user()->cita;
 
-        if (!$cita) return response()->noContent();
+        if (! $cita) {
+            return response()->noContent();
+        }
 
         $cita->delete();
 

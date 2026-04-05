@@ -5,7 +5,6 @@ namespace Tests\Feature;
 use App\Models\Etiqueta;
 use App\Models\Fotografia;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 class PruebasEtiquetaTest extends TestCase
@@ -17,7 +16,7 @@ class PruebasEtiquetaTest extends TestCase
     /**
      * La fotografía no existe devuelve vista de error.
      */
-    public function testFalloFotoInexistente(): void
+    public function test_fallo_foto_inexistente(): void
     {
         $response = $this->withoutMiddleware()
             ->put(route('anadiretiquetafoto', 99999), [
@@ -31,7 +30,7 @@ class PruebasEtiquetaTest extends TestCase
     /**
      * nombre_etiqueta no existe aún en BD el controlador la crea y la asocia a la fotografía.
      */
-    public function testAnadeEtiquetaNueva(): void
+    public function test_anade_etiqueta_nueva(): void
     {
         $fotografia = Fotografia::factory()->create();
 
@@ -54,10 +53,10 @@ class PruebasEtiquetaTest extends TestCase
     /**
      * nombre_etiqueta ya existe en BD y la fotografía aún no la tiene se asocia correctamente.
      */
-    public function testAnadeEtiquetaExistente(): void
+    public function test_anade_etiqueta_existente(): void
     {
         $fotografia = Fotografia::factory()->create();
-        $etiqueta   = Etiqueta::factory()->create(['nombre_etiqueta' => 'RETRATO']);
+        $etiqueta = Etiqueta::factory()->create(['nombre_etiqueta' => 'RETRATO']);
 
         $response = $this->withoutMiddleware()
             ->put(route('anadiretiquetafoto', $fotografia->id), [
@@ -75,10 +74,10 @@ class PruebasEtiquetaTest extends TestCase
     /**
      * La fotografía ya tiene esa etiqueta asociada devuelve vista de error.
      */
-    public function testFalloEtiquetaYaAsociada(): void
+    public function test_fallo_etiqueta_ya_asociada(): void
     {
         $fotografia = Fotografia::factory()->create();
-        $etiqueta   = Etiqueta::factory()->create(['nombre_etiqueta' => 'MODA']);
+        $etiqueta = Etiqueta::factory()->create(['nombre_etiqueta' => 'MODA']);
 
         // Asociar previamente la etiqueta a la fotografía
         $fotografia->etiquetas()->attach($etiqueta->id);

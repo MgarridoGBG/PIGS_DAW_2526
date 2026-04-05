@@ -2,22 +2,20 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Etiqueta;
 use App\Models\Fotografia;
+use Illuminate\Http\Request;
 
 /**
  * Controlador para gestionar las etiquetas de fotografías.
  *
  * Proporciona operaciones para crear, borrar y asociar/desasociar etiquetas a fotografias.
- *
  */
 class EtiquetaController extends Controller
 {
     /**
      * Añade una etiqueta a una fotografía.
-     *     
-     * @param  \Illuminate\Http\Request  $peticion
+     *
      * @param  int  $id  Identificador de la fotografía
      * @return \Illuminate\Contracts\View\View
      */
@@ -31,14 +29,14 @@ class EtiquetaController extends Controller
         // Buscar la fotografía y comprobar si existe.
         $fotografia = Fotografia::find($id);
 
-        if (!$fotografia) {
+        if (! $fotografia) {
             return view('errores.error', ['mensaje' => 'La fotografía no existe']);
         }
 
-        if (!$etiqueta) {
+        if (! $etiqueta) {
             // Si no existe la etiqueta,la creamos y la asociamos a la fotografía (Éxito).
             $etiqueta = Etiqueta::create([
-                'nombre_etiqueta' => $nombre_etiqueta
+                'nombre_etiqueta' => $nombre_etiqueta,
             ]);
 
             $fotografia->etiquetas()->attach($etiqueta->id);
@@ -50,8 +48,9 @@ class EtiquetaController extends Controller
             if ($fotografia->etiquetas()->where('etiqueta_id', $etiqueta->id)->exists()) {
                 return view('errores.error', ['mensaje' => 'La fotografía ya tiene esta etiqueta asociada']);
             }
-           
+
             $fotografia->etiquetas()->attach($etiqueta->id);
+
             return view('errores.exito', ['mensaje' => 'Etiqueta añadida']);
         }
 
@@ -60,8 +59,7 @@ class EtiquetaController extends Controller
 
     /**
      * Elimina la asociación de una etiqueta con una fotografía.
-     *     
-     * @param  \Illuminate\Http\Request  $peticion
+     *
      * @param  int  $id  Identificador de la fotografía
      * @return \Illuminate\Contracts\View\View
      */
@@ -74,21 +72,21 @@ class EtiquetaController extends Controller
         // Buscar la fotografía
         $fotografia = Fotografia::find($id);
 
-        if (!$fotografia) {
+        if (! $fotografia) {
             return view('errores.error', ['mensaje' => 'La fotografía no existe']);
         }
 
         // Comprobar si existe una etiqueta con ese nombre (Error), comprobar si la fotografía no la tiene asociada (Error) y si la tiene desasociarla (Éxito).
         $etiqueta = Etiqueta::where('nombre_etiqueta', $nombre_etiqueta)->first();
 
-        if (!$etiqueta) {
+        if (! $etiqueta) {
             return view('errores.error', ['mensaje' => 'La etiqueta no existe']);
         }
-        
-        if (!$fotografia->etiquetas()->where('etiqueta_id', $etiqueta->id)->exists()) {
+
+        if (! $fotografia->etiquetas()->where('etiqueta_id', $etiqueta->id)->exists()) {
             return view('errores.error', ['mensaje' => 'La fotografía no tiene esta etiqueta asociada']);
         }
-        
+
         $fotografia->etiquetas()->detach($etiqueta->id);
 
         return view('errores.exito', ['mensaje' => 'Etiqueta eliminada']);
@@ -97,12 +95,11 @@ class EtiquetaController extends Controller
     /**
      * Elimina una etiqueta del sistema por su nombre.
      *
-     * @param  \Illuminate\Http\Request  $peticion
      * @return \Illuminate\Contracts\View\View
      */
     public function borrarEtiqueta(Request $peticion)
     {
-        $nombre_etiqueta = $peticion->input('nombre_etiqueta');       
+        $nombre_etiqueta = $peticion->input('nombre_etiqueta');
         $nombre_etiqueta = strtoupper($nombre_etiqueta);
 
         // Buscar la etiqueta por su nombre (en mayúsculas) y eliminarla si existe.
@@ -110,8 +107,9 @@ class EtiquetaController extends Controller
 
         if ($etiqueta) {
             $etiqueta->delete();
+
             return view('errores.exito', [
-                'mensaje' => "Etiqueta {$nombre_etiqueta} eliminada"
+                'mensaje' => "Etiqueta {$nombre_etiqueta} eliminada",
             ]);
         }
 
@@ -121,7 +119,6 @@ class EtiquetaController extends Controller
     /**
      * Crea una nueva etiqueta si no existe.
      *
-     * @param  \Illuminate\Http\Request  $peticion
      * @return \Illuminate\Contracts\View\View
      */
     public function crearEtiqueta(Request $peticion)
@@ -135,16 +132,18 @@ class EtiquetaController extends Controller
         // Buscar la etiqueta. Si no existe, crearla (Éxito). Si existe, mostrar error.
         $etiqueta = Etiqueta::where('nombre_etiqueta', $nombre_etiqueta)->first();
 
-        if (!$etiqueta) {
+        if (! $etiqueta) {
             $etiqueta = Etiqueta::create([
-                'nombre_etiqueta' => $nombre_etiqueta
+                'nombre_etiqueta' => $nombre_etiqueta,
             ]);
+
             return view('errores.exito', [
-                'mensaje' => "Etiqueta {$nombre_etiqueta} creada"
+                'mensaje' => "Etiqueta {$nombre_etiqueta} creada",
             ]);
 
         }
-            return view('errores.error', ['mensaje' => 'Ya existe una etiqueta con ese nombre']);
-        
+
+        return view('errores.error', ['mensaje' => 'Ya existe una etiqueta con ese nombre']);
+
     }
 }

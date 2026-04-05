@@ -13,17 +13,17 @@ class PruebasItemTest extends TestCase
 {
     use RefreshDatabase;
 
-        // calcularPrecio
-    
+    // calcularPrecio
+
     /**
      * Con formato y soporte existentes, calcula el precio correctamente.
      * Fórmula: round(((alto * ancho) * precio) / 10000, 2)
      */
-    public function testCalcularPrecioBien(): void
+    public function test_calcular_precio_bien(): void
     {
         $formato = Formato::factory()->create(['ancho' => 100.00, 'alto' => 200.00]);
         $soporte = Soporte::factory()->create(['precio' => 5.00]);
-        $controlador = new ItemController();
+        $controlador = new ItemController;
 
         $resultado = $controlador->calcularPrecio($formato->id, $soporte->id);
 
@@ -32,12 +32,12 @@ class PruebasItemTest extends TestCase
         $this->assertSame($esperado, $resultado);
     }
 
-        // borrarItemPedido
-    
+    // borrarItemPedido
+
     /**
      * Intentar borrar un item que no existe devuelve la vista errores.error.
      */
-    public function testFalloBorrarItemNoExiste(): void
+    public function test_fallo_borrar_item_no_existe(): void
     {
         $response = $this->withoutMiddleware()
             ->delete(route('borraritempedido', 99999));

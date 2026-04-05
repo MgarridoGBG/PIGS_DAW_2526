@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Model;
 class Privilegio extends Model
 {
     use HasFactory;
+
     /** Campos asignables */
     protected $fillable = ['nombre_priv'];
 
@@ -25,6 +26,6 @@ class Privilegio extends Model
     public function roles()
     {
         return $this->belongsToMany(Role::class, 'roles_privilegios')
-                    ->withTimestamps();
+            ->withTimestamps();
     }
 }

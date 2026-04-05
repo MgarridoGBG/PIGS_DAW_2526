@@ -18,7 +18,7 @@ class PruebasCitaTest extends TestCase
     /**
      * email_usuario con formato inválido (no es un email) error de validación.
      */
-    public function testFalloEmailInvalido(): void
+    public function test_fallo_email_invalido(): void
     {
         $cita = Cita::factory()->create();
 
@@ -33,7 +33,7 @@ class PruebasCitaTest extends TestCase
     /**
      * email_usuario con formato correcto pero que no existe en la tabla users error de validación.
      */
-    public function testFalloEmailNoExiste(): void
+    public function test_fallo_email_no_existe(): void
     {
         $cita = Cita::factory()->create();
 
@@ -48,7 +48,7 @@ class PruebasCitaTest extends TestCase
     /**
      * email_usuario válido y existente se acepta la validación y se actualiza la cita.
      */
-    public function testActualizaCorrectoEmail(): void
+    public function test_actualiza_correcto_email(): void
     {
         $citaOriginal = Cita::factory()->create();
         // Creamos otro usuario (sin cita) que será el nuevo dueño
@@ -62,7 +62,7 @@ class PruebasCitaTest extends TestCase
         $response->assertSessionDoesntHaveErrors(['email_usuario']);
         $response->assertViewIs('errores.exito');
         $this->assertDatabaseHas('citas', [
-            'id'      => $citaOriginal->id,
+            'id' => $citaOriginal->id,
             'user_id' => $nuevoUsuario->id,
         ]);
     }
@@ -72,7 +72,7 @@ class PruebasCitaTest extends TestCase
     /**
      * estado_cita con valor fuera del enum EstadoCita error de validación.
      */
-    public function testFalloEstadoInvalido(): void
+    public function test_fallo_estado_invalido(): void
     {
         $cita = Cita::factory()->create();
 
@@ -87,7 +87,7 @@ class PruebasCitaTest extends TestCase
     /**
      * estado_cita valor válido del enum, pasa la validación.
      */
-    public function testEstadoValido(): void
+    public function test_estado_valido(): void
     {
         $cita = Cita::factory()->create();
 
@@ -98,7 +98,7 @@ class PruebasCitaTest extends TestCase
 
         $response->assertSessionDoesntHaveErrors(['estado_cita']);
         $this->assertDatabaseHas('citas', [
-            'id'          => $cita->id,
+            'id' => $cita->id,
             'estado_cita' => EstadoCita::SOLICITADA->value,
         ]);
     }
@@ -108,7 +108,7 @@ class PruebasCitaTest extends TestCase
     /**
      * fecha_cita con cadena que no es una fecha error de validación.
      */
-    public function testFalloFechaNoEsFecha(): void
+    public function test_fallo_fecha_no_es_fecha(): void
     {
         $cita = Cita::factory()->create();
 
@@ -120,11 +120,10 @@ class PruebasCitaTest extends TestCase
         $response->assertSessionHasErrors(['fecha_cita']);
     }
 
-
     /**
      * fecha_cita con formato Y-m-d válido pasa la validación y actualiza la cita.
      */
-    public function testFechaValidaActualiza(): void
+    public function test_fecha_valida_actualiza(): void
     {
         $cita = Cita::factory()->create(['turno' => TurnoCita::MANANA->value]);
         $nuevaFecha = '2030-06-15';
@@ -136,9 +135,8 @@ class PruebasCitaTest extends TestCase
 
         $response->assertSessionDoesntHaveErrors(['fecha_cita']);
         $this->assertDatabaseHas('citas', [
-            'id'         => $cita->id,
+            'id' => $cita->id,
             'fecha_cita' => $nuevaFecha,
         ]);
     }
 }
-

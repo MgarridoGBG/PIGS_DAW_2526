@@ -1,12 +1,11 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\FotografiaController;
+use App\Http\Controllers\PedidoController;
+use App\Http\Controllers\ReportajeController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ZonaPrivadaController;
-use App\Http\Controllers\ReportajeController;
-use App\Http\Controllers\PedidoController;
-
+use Illuminate\Support\Facades\Route;
 
 // Rutas de la aplicación, organizadas por funcionalidad y acceso (públicas, privadas, administración).
 require __DIR__.'/aplicacion/servirfotosrepor.php';
@@ -22,15 +21,14 @@ require __DIR__.'/administracion/adminpedidos.php';
 require __DIR__.'/administracion/adminetiquetas.php';
 require __DIR__.'/administracion/admincitas.php';
 
-
-//Ruta a la zona pública principal, pagina de inicio.
+// Ruta a la zona pública principal, pagina de inicio.
 Route::get('/', function () {
     $usuarios = App\Models\User::all();
+
     return view('zonapublica.principal', ['usuarios' => $usuarios]);
 })->name('zonapublica');
 
-
-//Rutas publicas adicionales
+// Rutas publicas adicionales
 // Ruta a la página de contacto
 Route::get('/contacto', function () {
     return view('zonapublica.contacto');
@@ -48,9 +46,7 @@ Route::get('/manual', function () {
     return view('zonapublica.manual');
 })->name('manual');
 
-
-
-//Ruta a la zona privada (accediendo a /zonaprivada vía GET)
+// Ruta a la zona privada (accediendo a /zonaprivada vía GET)
 Route::get('/zonaprivada', [ZonaPrivadaController::class, 'cargarZonaPrivada'])
     ->middleware('auth')->name('zonaprivada');
 
@@ -67,4 +63,3 @@ Route::match(['get', 'post'], '/filtrarfotosfantasma', [FotografiaController::cl
 
 Route::match(['get', 'post'], '/filtrarpedidosfantasma', [PedidoController::class, 'buscarPedidosFantasma'])
     ->name('filtrarpedidosfantasma')->middleware('chequeaprivilegio:admin_avanzado');
-

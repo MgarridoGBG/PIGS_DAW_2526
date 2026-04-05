@@ -14,8 +14,9 @@ use Illuminate\Database\Eloquent\Model;
 class Soporte extends Model
 {
     use HasFactory;
+
     /** Campos asignables */
-    protected $fillable = ['nombre_soport','disponibilidad','precio'];
+    protected $fillable = ['nombre_soport', 'disponibilidad', 'precio'];
 
     /**
      * Relación: un soporte puede estar presente en muchos items.
@@ -27,4 +28,3 @@ class Soporte extends Model
         return $this->hasMany(Item::class);
     }
 }
-

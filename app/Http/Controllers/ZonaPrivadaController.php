@@ -2,28 +2,23 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Cita;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use App\Models\Reportaje;
-use App\Models\Role;
-use App\Models\User;
+use App\Enums\EstadoPedido;
 use App\Enums\NombreRole;
 use App\Enums\TipoReportaje;
+use App\Models\Cita;
 use App\Models\Pedido;
-use App\Enums\EstadoPedido;
-use App\Models\Etiqueta;
+use App\Models\Reportaje;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 
- /**
-     * Controlador de la zona privada de los distintos usuarios.
-     *
-     * Proporciona vistas y entrega a estas datos necesarios para el panel privado de un usuario
-     * autenticado: reportajes, citas, pedidos y datos auxiliares (enums, etiquetas...).
-     */
-
+/**
+ * Controlador de la zona privada de los distintos usuarios.
+ *
+ * Proporciona vistas y entrega a estas datos necesarios para el panel privado de un usuario
+ * autenticado: reportajes, citas, pedidos y datos auxiliares (enums, etiquetas...).
+ */
 class ZonaPrivadaController extends Controller
 {
-   
     /**
      * Carga los datos necesarios para la vista de la zona privada del usuario autenticado.
      *
@@ -36,10 +31,10 @@ class ZonaPrivadaController extends Controller
      */
     public function cargarZonaPrivada()
     {
-       
+
         $id = Auth::user()->id;
         $reportajes = Reportaje::where('user_id', $id)->get();
-        $citas = Cita::where('user_id', $id)->get();        
+        $citas = Cita::where('user_id', $id)->get();
         $usuario = User::find($id);
         // Usar los enums nativos para valores fijos en BD
         $roles = NombreRole::values();

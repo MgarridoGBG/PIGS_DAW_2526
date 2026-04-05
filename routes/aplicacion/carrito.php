@@ -1,6 +1,7 @@
 <?php
-use Illuminate\Support\Facades\Route; 
+
 use App\Http\Controllers\CarritoController;
+use Illuminate\Support\Facades\Route;
 
 // GESTION DEL CARRITO (SESION)
 // Ruta para mostrar formulario de nuevo item en curso

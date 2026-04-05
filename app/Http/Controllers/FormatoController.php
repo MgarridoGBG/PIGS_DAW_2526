@@ -3,14 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Formato;
-
 use Illuminate\Http\Request;
 
 /**
  * Controlador para gestionar formatos de fotos.
  *
  * Listar, filtrar, crear, editar y borrar formatos.
- *
  */
 class FormatoController extends Controller
 {
@@ -22,7 +20,8 @@ class FormatoController extends Controller
     public function listarFormatos()
     {
         $formatos = Formato::paginate(15); // Eager loading de la relación 'role'cargando los roles asociados a los usuarios de antemano
-        $mensaje = "Encontrados " . $formatos->total() . " formatos en la base de datos";
+        $mensaje = 'Encontrados '.$formatos->total().' formatos en la base de datos';
+
         return view('parciales.listados.listaformatos', compact('formatos', 'mensaje'));
     }
 
@@ -31,7 +30,6 @@ class FormatoController extends Controller
      *
      * Soporta GET y POST por necesidad en la paginación.
      *
-     * @param  \Illuminate\Http\Request  $peticion
      * @return \Illuminate\Contracts\View\View
      */
     public function filtrarFormatos(Request $peticion)
@@ -48,12 +46,13 @@ class FormatoController extends Controller
                 return $consulta->where('alto', $peticion->alto);
             })
             ->when($peticion->filled('nombre'), function ($consulta) use ($peticion) {
-                return $consulta->where('nombre_format', 'like', '%' . $peticion->nombre . '%');
+                return $consulta->where('nombre_format', 'like', '%'.$peticion->nombre.'%');
             })
             ->paginate(15)
             ->appends($peticion->except('page'));
 
-        $mensaje = "Encontrados " . $formatos->total() . " formatos en la base de datos según los filtros aplicados";
+        $mensaje = 'Encontrados '.$formatos->total().' formatos en la base de datos según los filtros aplicados';
+
         return view('parciales.listados.listaformatos', compact('formatos', 'mensaje'));
     }
 
@@ -88,7 +87,7 @@ class FormatoController extends Controller
         $formato = Formato::findOrFail($id);
 
         return view('administracion.formularios.formeditarformato', [
-            'formato' => $formato
+            'formato' => $formato,
         ]);
     }
 
@@ -97,7 +96,6 @@ class FormatoController extends Controller
      *
      * Valida los campos y actualiza el modelo solo con los valores presentes en el form.
      *
-     * @param  \Illuminate\Http\Request  $peticion
      * @param  int  $id
      * @return \Illuminate\Contracts\View\View
      */
@@ -114,7 +112,7 @@ class FormatoController extends Controller
         $datosValidados = $peticion->validate([
             'nombre_format' => 'nullable|string|max:50|unique:formatos,nombre_format',
             'ancho' => 'nullable|numeric|min:0',
-            'alto' => 'nullable|numeric|min:0'
+            'alto' => 'nullable|numeric|min:0',
         ], [
             'nombre_format.string' => 'El nombre del formato debe ser texto.',
             'nombre_format.max' => 'El nombre del formato no debe exceder los :max caracteres.',
@@ -122,7 +120,7 @@ class FormatoController extends Controller
             'ancho.numeric' => 'El ancho debe ser un valor numérico.',
             'ancho.min' => 'El ancho no puede ser negativo.',
             'alto.numeric' => 'El alto debe ser un valor numérico.',
-            'alto.min' => 'El alto no puede ser negativo.'
+            'alto.min' => 'El alto no puede ser negativo.',
         ]);
 
         // Actualizar solo los campos que tienen datos
@@ -155,20 +153,20 @@ class FormatoController extends Controller
     {
         return view('administracion.formularios.formnuevoformato');
     }
+
     /**
      * Valida y registra un nuevo formato en la base de datos.
      * o devuelve una vista de error.
-     * 
-     * @param  \Illuminate\Http\Request  $peticion
+     *
      * @return \Illuminate\Contracts\View\View
      */
     public function registrarNuevoFormato(Request $peticion)
     {
-        //Validar los datos del formulario
+        // Validar los datos del formulario
         $datosValidados = $peticion->validate([
             'nombre_format' => 'required|string|max:50|unique:formatos,nombre_format',
             'ancho' => 'required|numeric|min:0',
-            'alto' => 'required|numeric|min:0'
+            'alto' => 'required|numeric|min:0',
         ], [
             // Aunque muchos de estos restraints ya se aplican en en front, los valido también en el back.
             'nombre_format.required' => 'El nombre del formato es obligatorio.',
@@ -180,14 +178,14 @@ class FormatoController extends Controller
             'ancho.min' => 'El ancho no puede ser negativo.',
             'alto.required' => 'El alto es obligatorio.',
             'alto.numeric' => 'El alto debe ser un valor numérico.',
-            'alto.min' => 'El alto no puede ser negativo.'
+            'alto.min' => 'El alto no puede ser negativo.',
         ]);
 
-        //Crear formato.
+        // Crear formato.
         $formato = Formato::create([
             'nombre_format' => $datosValidados['nombre_format'],
             'ancho' => $datosValidados['ancho'],
-            'alto' => $datosValidados['alto']
+            'alto' => $datosValidados['alto'],
         ]);
 
         if ($formato) {

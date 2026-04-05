@@ -27,7 +27,7 @@
 
     <div style="width:100%" id="lista-lazyload" data-url="{{ route('filtrarfotosfantasma') }}"> {{-- Contenedor donde se cargará la tabla de fotos fantasma vía AJAX --}}
         <div class="spinner-contenedor">
-            <img src="{{ Vite::asset('resources/images/spinner.gif') }}" alt="Cargando...">
+            <img class="spinner-img" src="{{ Vite::asset('resources/images/spinner.gif') }}" alt="Cargando...">
         </div>
     </div>
 

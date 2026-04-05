@@ -1,5 +1,7 @@
 <?php
+
 // proyecto/app/Models/User.php
+
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -33,7 +35,7 @@ class User extends Authenticatable
         'password',
         'dni',
         'role_id',
-        'marcado_eliminar'
+        'marcado_eliminar',
     ];
 
     /**

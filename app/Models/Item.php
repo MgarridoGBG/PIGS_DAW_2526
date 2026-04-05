@@ -14,8 +14,9 @@ use Illuminate\Database\Eloquent\Model;
 class Item extends Model
 {
     use HasFactory;
+
     /** Campos asignables */
-    protected $fillable = ['cantidad','pedido_id','formato_id','soporte_id','fotografia_id','precio'];
+    protected $fillable = ['cantidad', 'pedido_id', 'formato_id', 'soporte_id', 'fotografia_id', 'precio'];
 
     /**
      * Relación: un item pertenece a un solo pedido.
@@ -57,4 +58,3 @@ class Item extends Model
         return $this->belongsTo(Fotografia::class);
     }
 }
-

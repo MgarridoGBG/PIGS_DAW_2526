@@ -14,8 +14,9 @@ use Illuminate\Database\Eloquent\Model;
 class Fotografia extends Model
 {
     use HasFactory;
+
     /** Campos asignables */
-    protected $fillable = ['nombre_foto','reportaje_id'];
+    protected $fillable = ['nombre_foto', 'reportaje_id'];
 
     /**
      * Relación: una fotografía pertenece a un solo reportaje.
@@ -35,7 +36,7 @@ class Fotografia extends Model
     public function etiquetas()
     {
         return $this->belongsToMany(Etiqueta::class, 'fotografias_etiquetas')
-                    ->withTimestamps();
+            ->withTimestamps();
     }
 
     /**

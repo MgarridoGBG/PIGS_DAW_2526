@@ -1,7 +1,7 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SoporteController;
+use Illuminate\Support\Facades\Route;
 
 // GESTION DE SOPORTES
 // Rutas para listar, editar, crear y borrar soportes, solo accesible para roles con privilegio 'admin_avanzado'

@@ -14,30 +14,31 @@ use Tests\TestCase;
 class PruebasFotografiaTest extends TestCase
 {
     use RefreshDatabase;
-      
-    // Helper 
+
+    // Helper
 
     /** Crea un User cuyo Role tiene nombre_role = $nombre (string). */
     private function crearUsuarioConRole(string $nombre): User
     {
         $role = Role::factory()->create(['nombre_role' => $nombre]);
+
         return User::factory()->create(['role_id' => $role->id]);
     }
 
-        // mostrarFotosReportaje
+    // mostrarFotosReportaje
 
     /**
      * Un usuario que no es propietario del reportaje ni admin/empleado
      * y el reportaje es privado error de permisos.
      */
-    public function testFalloUserSinPermisos(): void
+    public function test_fallo_user_sin_permisos(): void
     {
         $propietario = $this->crearUsuarioConRole(NombreRole::CLIENTE->value);
-        $reportaje   = Reportaje::factory()->create(['user_id' => $propietario->id, 'publico' => false]);
+        $reportaje = Reportaje::factory()->create(['user_id' => $propietario->id, 'publico' => false]);
 
         $otroUsuario = $this->crearUsuarioConRole(NombreRole::CLIENTE->value);
 
-        $response = $this->actingAs($otroUsuario) 
+        $response = $this->actingAs($otroUsuario)
             ->withoutMiddleware()
             ->get(route('reportajefotos', $reportaje->id));
 
@@ -48,10 +49,10 @@ class PruebasFotografiaTest extends TestCase
     /**
      * El propietario del reportaje privado puede ver su galería.
      */
-    public function testUserPropietarioAccedeRep(): void
+    public function test_user_propietario_accede_rep(): void
     {
         $propietario = $this->crearUsuarioConRole(NombreRole::CLIENTE->value);
-        $reportaje   = Reportaje::factory()->create(['user_id' => $propietario->id, 'publico' => false]);
+        $reportaje = Reportaje::factory()->create(['user_id' => $propietario->id, 'publico' => false]);
 
         $response = $this->actingAs($propietario)
             ->withoutMiddleware()
@@ -64,10 +65,10 @@ class PruebasFotografiaTest extends TestCase
     /**
      * Un administrador o empleado puede ver el reportaje privado de cualquier usuario.
      */
-    public function testAdminAccedeRepPrivado(): void
+    public function test_admin_accede_rep_privado(): void
     {
         $propietario = $this->crearUsuarioConRole(NombreRole::CLIENTE->value);
-        $reportaje   = Reportaje::factory()->create(['user_id' => $propietario->id, 'publico' => false]);
+        $reportaje = Reportaje::factory()->create(['user_id' => $propietario->id, 'publico' => false]);
 
         $admin = $this->crearUsuarioConRole(NombreRole::ADMIN->value);
 
@@ -79,16 +80,16 @@ class PruebasFotografiaTest extends TestCase
         $response->assertViewIs('zonaprivada.galeriareportajeprivado');
     }
 
-        // mostrarFoto
+    // mostrarFoto
 
     /**
      * El propietario de la foto puede verla (vista privada).
      */
-    public function testUserPropAccedeFoto(): void
+    public function test_user_prop_accede_foto(): void
     {
         $propietario = $this->crearUsuarioConRole(NombreRole::CLIENTE->value);
-        $reportaje   = Reportaje::factory()->create(['user_id' => $propietario->id, 'publico' => false]);
-        $foto        = Fotografia::factory()->create(['reportaje_id' => $reportaje->id]);
+        $reportaje = Reportaje::factory()->create(['user_id' => $propietario->id, 'publico' => false]);
+        $foto = Fotografia::factory()->create(['reportaje_id' => $reportaje->id]);
 
         $response = $this->actingAs($propietario)
             ->withoutMiddleware()
@@ -98,15 +99,14 @@ class PruebasFotografiaTest extends TestCase
         $response->assertViewIs('zonaprivada.mostrarfoto');
     }
 
-
     /**
      * Un empleado o admin puede ver cualquier foto privada.
      */
-    public function testEmpleadoAccedeFotoPrivada(): void
+    public function test_empleado_accede_foto_privada(): void
     {
         $propietario = $this->crearUsuarioConRole(NombreRole::CLIENTE->value);
-        $reportaje   = Reportaje::factory()->create(['user_id' => $propietario->id, 'publico' => false]);
-        $foto        = Fotografia::factory()->create(['reportaje_id' => $reportaje->id]);
+        $reportaje = Reportaje::factory()->create(['user_id' => $propietario->id, 'publico' => false]);
+        $foto = Fotografia::factory()->create(['reportaje_id' => $reportaje->id]);
 
         $empleado = $this->crearUsuarioConRole(NombreRole::EMPLEADO->value);
 
@@ -121,11 +121,11 @@ class PruebasFotografiaTest extends TestCase
     /**
      * Un usuario ajeno al reportaje privado no puede ver la foto.
      */
-    public function testFalloUserSinPermisoAccedeFoto(): void
+    public function test_fallo_user_sin_permiso_accede_foto(): void
     {
         $propietario = $this->crearUsuarioConRole(NombreRole::CLIENTE->value);
-        $reportaje   = Reportaje::factory()->create(['user_id' => $propietario->id, 'publico' => false]);
-        $foto        = Fotografia::factory()->create(['reportaje_id' => $reportaje->id]);
+        $reportaje = Reportaje::factory()->create(['user_id' => $propietario->id, 'publico' => false]);
+        $foto = Fotografia::factory()->create(['reportaje_id' => $reportaje->id]);
 
         $otroUsuario = $this->crearUsuarioConRole(NombreRole::CLIENTE->value);
 
@@ -137,12 +137,12 @@ class PruebasFotografiaTest extends TestCase
         $response->assertViewIs('errores.error');
     }
 
-        // servirFotoStorage
+    // servirFotoStorage
 
     /**
      * La ruta pedida no existe en storage errores.error.
      */
-    public function testFalloNoFotoFisica(): void
+    public function test_fallo_no_foto_fisica(): void
     {
         Storage::fake('local');
 
@@ -153,17 +153,16 @@ class PruebasFotografiaTest extends TestCase
         $response->assertViewIs('errores.error');
     }
 
-
     /**
      * Archivo y BD correctos pero usuario sin permiso errores.error.
      */
-    public function testFalloFotoStorageUserSinPermiso(): void
+    public function test_fallo_foto_storage_user_sin_permiso(): void
     {
         Storage::fake('local');
 
         $propietario = $this->crearUsuarioConRole(NombreRole::CLIENTE->value);
-        $reportaje   = Reportaje::factory()->create(['user_id' => $propietario->id, 'publico' => false, 'codigo' => 'REPOR0001']);
-        $foto        = Fotografia::factory()->create(['reportaje_id' => $reportaje->id, 'nombre_foto' => 'prueba.jpg']);
+        $reportaje = Reportaje::factory()->create(['user_id' => $propietario->id, 'publico' => false, 'codigo' => 'REPOR0001']);
+        $foto = Fotografia::factory()->create(['reportaje_id' => $reportaje->id, 'nombre_foto' => 'prueba.jpg']);
 
         Storage::disk('local')->put('fotosreportajes/REPOR0001/prueba.jpg', 'fake-content');
 
@@ -177,17 +176,16 @@ class PruebasFotografiaTest extends TestCase
         $response->assertViewIs('errores.error');
     }
 
-
-        // filtrarFotografias
+    // filtrarFotografias
 
     /**
      * Filtrar por reportaje_codigo devuelve solo las fotos de ese reportaje.
      * el resto funcionan igual pero con diferentes campos.
      */
-    public function testFiltrarFotoCodigoRep(): void
+    public function test_filtrar_foto_codigo_rep(): void
     {
         $reportajeBuscado = Reportaje::factory()->create(['codigo' => 'BUSCAR001']);
-        $reportajeOtro    = Reportaje::factory()->create(['codigo' => 'OTRO00001']);
+        $reportajeOtro = Reportaje::factory()->create(['codigo' => 'OTRO00001']);
 
         Fotografia::factory()->count(3)->create(['reportaje_id' => $reportajeBuscado->id]);
         Fotografia::factory()->count(2)->create(['reportaje_id' => $reportajeOtro->id]);
@@ -202,17 +200,17 @@ class PruebasFotografiaTest extends TestCase
         $this->assertSame(3, $fotografias->total());
     }
 
-        // registrarNuevaFotografia
+    // registrarNuevaFotografia
 
     /**
      * nombre_foto con más de 100 caracteres error de validación.
      */
-    public function testFalloNombreFotoLargo(): void
+    public function test_fallo_nombre_foto_largo(): void
     {
         $response = $this->withoutMiddleware()
             ->post(route('nuevafotografia'), [
-                'nombre_foto'       => str_repeat('a', 97) . '.jpg',
-                'reportaje_codigo'  => 'REPOR0001',
+                'nombre_foto' => str_repeat('a', 97).'.jpg',
+                'reportaje_codigo' => 'REPOR0001',
             ]);
 
         $response->assertSessionHasErrors(['nombre_foto']);
@@ -221,12 +219,12 @@ class PruebasFotografiaTest extends TestCase
     /**
      * reportaje_codigo con más de 20 caracteres error de validación.
      */
-    public function testFalloCodigoReportajeLargo(): void
+    public function test_fallo_codigo_reportaje_largo(): void
     {
         $response = $this->withoutMiddleware()
             ->post(route('nuevafotografia'), [
-                'nombre_foto'       => 'foto.jpg',
-                'reportaje_codigo'  => 'XXXXXXXXXXXXXXXXXXXXX',
+                'nombre_foto' => 'foto.jpg',
+                'reportaje_codigo' => 'XXXXXXXXXXXXXXXXXXXXX',
             ]);
 
         $response->assertSessionHasErrors(['reportaje_codigo']);
@@ -235,41 +233,41 @@ class PruebasFotografiaTest extends TestCase
     /**
      * reportaje_codigo inexistente en BD error de validación (regla exists).
      */
-    public function testFalloCodigoReportajeNoExiste(): void
+    public function test_fallo_codigo_reportaje_no_existe(): void
     {
         $response = $this->withoutMiddleware()
             ->post(route('nuevafotografia'), [
-                'nombre_foto'       => 'foto.jpg',
-                'reportaje_codigo'  => 'NOEXISTE001',
+                'nombre_foto' => 'foto.jpg',
+                'reportaje_codigo' => 'NOEXISTE001',
             ]);
 
         $response->assertSessionHasErrors(['reportaje_codigo']);
     }
 
-        // borrarFotografia
+    // borrarFotografia
 
     /**
      * Cuando el archivo físico existe pero no puede eliminarse (se simula con
      * un directorio en lugar del archivo: unlink() sobre un directorio falla),
      * el controlador debe devolver errores.error.
      */
-    public function testFalloBorrarArchivoFisico(): void
+    public function test_fallo_borrar_archivo_fisico(): void
     {
-        $reportaje  = Reportaje::factory()->create(['codigo' => 'REPOR_DEL1']);
+        $reportaje = Reportaje::factory()->create(['codigo' => 'REPOR_DEL1']);
         $fotografia = Fotografia::factory()->create([
             'reportaje_id' => $reportaje->id,
-            'nombre_foto'  => 'foto_borrar.jpg',
+            'nombre_foto' => 'foto_borrar.jpg',
         ]);
 
         // Crear un directorio en lugar del archivo para que unlink() falle
         $rutaDir = storage_path('app/private/fotosreportajes/REPOR_DEL1');
-        $rutaFalso = $rutaDir . '/foto_borrar.jpg';
+        $rutaFalso = $rutaDir.'/foto_borrar.jpg';
 
-        if (!is_dir($rutaDir)) {
+        if (! is_dir($rutaDir)) {
             mkdir($rutaDir, 0777, true);
         }
         // Crear un subdirectorio con el nombre del "archivo" file_exists = true, unlink = false
-        if (!is_dir($rutaFalso)) {
+        if (! is_dir($rutaFalso)) {
             mkdir($rutaFalso, 0777, true);
         }
 
@@ -286,14 +284,14 @@ class PruebasFotografiaTest extends TestCase
         $response->assertViewIs('errores.error');
     }
 
-        // procesarFormEditarFotografia
+    // procesarFormEditarFotografia
 
     /**
      * nombre_foto con más de 100 caracteres error de validación.
      */
-    public function testFalloEditarNombreFotoLargo(): void
+    public function test_fallo_editar_nombre_foto_largo(): void
     {
-        $reportaje  = Reportaje::factory()->create();
+        $reportaje = Reportaje::factory()->create();
         $fotografia = Fotografia::factory()->create(['reportaje_id' => $reportaje->id]);
 
         $response = $this->withoutMiddleware()
@@ -308,31 +306,31 @@ class PruebasFotografiaTest extends TestCase
      * El archivo con el nuevo nombre ya existe físicamente (no se puede renombrar)
      * el controlador devuelve errores.error.
      */
-    public function testFalloEditarFotoArchivoExiste(): void
+    public function test_fallo_editar_foto_archivo_existe(): void
     {
-        $reportaje  = Reportaje::factory()->create(['codigo' => 'REPOR_EDT1']);
+        $reportaje = Reportaje::factory()->create(['codigo' => 'REPOR_EDT1']);
         $fotografia = Fotografia::factory()->create([
             'reportaje_id' => $reportaje->id,
-            'nombre_foto'  => 'foto_vieja.jpg',
+            'nombre_foto' => 'foto_vieja.jpg',
         ]);
 
         // Crear los dos archivos físicos: el original y el destino
         $rutaDir = storage_path('app/private/fotosreportajes/REPOR_EDT1');
-        if (!is_dir($rutaDir)) {
+        if (! is_dir($rutaDir)) {
             mkdir($rutaDir, 0777, true);
         }
-        file_put_contents($rutaDir . '/foto_vieja.jpg', 'contenido original');
-        file_put_contents($rutaDir . '/foto_nueva.jpg', 'contenido destino');
+        file_put_contents($rutaDir.'/foto_vieja.jpg', 'contenido original');
+        file_put_contents($rutaDir.'/foto_nueva.jpg', 'contenido destino');
 
         $response = $this->withoutMiddleware()
             ->put(route('editarfotografia', $fotografia->id), [
-                'nombre_foto'    => 'foto_nueva.jpg',
+                'nombre_foto' => 'foto_nueva.jpg',
                 'accion_archivo' => 'renombrar',
             ]);
 
         // Limpieza
-        @unlink($rutaDir . '/foto_vieja.jpg');
-        @unlink($rutaDir . '/foto_nueva.jpg');
+        @unlink($rutaDir.'/foto_vieja.jpg');
+        @unlink($rutaDir.'/foto_nueva.jpg');
         @rmdir($rutaDir);
 
         $response->assertStatus(200);

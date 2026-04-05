@@ -4,12 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Enums\EstadoCita;
 use App\Enums\TurnoCita;
-use Illuminate\Http\Request;
 use App\Models\Cita;
 use App\Models\User;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\QueryException;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 /**
  * Controlador para gestionar las citas (reservas) del sistema.
@@ -29,16 +28,15 @@ class CitaController extends Controller
     public function listarCitas()
     {
         $citas = Cita::with('user')->paginate(15); // Eager loading de la relación 'user' cargando los usuarios asociados a las citas de antemano
-        $mensaje = "Encontradas " . $citas->total() . " citas en la base de datos";
+        $mensaje = 'Encontradas '.$citas->total().' citas en la base de datos';
+
         return view('parciales.listados.listacitas', compact('citas', 'mensaje'));
     }
-
 
     /**
      * Filtra las citas según parámetros opcionales y devuelve una lista paginada.
      * soporta GET y POST por necesidad en la paginación.
-     * 
-     * @param  \Illuminate\Http\Request  $peticion
+     *
      * @return \Illuminate\Contracts\View\View
      */
     public function filtrarCitas(Request $peticion)
@@ -53,14 +51,14 @@ class CitaController extends Controller
             })
             ->when($peticion->filled('email_usuario'), function ($consulta) use ($peticion) {
                 return $consulta->whereHas('user', function ($consultar) use ($peticion) {
-                    $consultar->where('email', 'like', '%' . $peticion->email_usuario . '%');
+                    $consultar->where('email', 'like', '%'.$peticion->email_usuario.'%');
                 });
             })
             ->when($peticion->filled('estadoCita'), function ($consulta) use ($peticion) {
-                return $consulta->where('estado_cita', 'like', '%' . $peticion->estadoCita . '%');
+                return $consulta->where('estado_cita', 'like', '%'.$peticion->estadoCita.'%');
             })
             ->when($peticion->filled('turno'), function ($consulta) use ($peticion) {
-                return $consulta->where('turno', 'like', '%' . $peticion->turno . '%');
+                return $consulta->where('turno', 'like', '%'.$peticion->turno.'%');
             })
             ->when($peticion->filled('fecha_cita'), function ($consulta) use ($peticion) {
                 return $consulta->where('fecha_cita', $peticion->fecha_cita);
@@ -68,12 +66,13 @@ class CitaController extends Controller
             ->paginate(15)
             ->appends($peticion->except('page')); // Mantener los parámetros de filtro en la paginación
 
-        $mensaje = "Encontradas " . $citas->total() . " citas en la base de datos según los filtros aplicados";
+        $mensaje = 'Encontradas '.$citas->total().' citas en la base de datos según los filtros aplicados';
+
         return view('parciales.listados.listacitas', compact('citas', 'mensaje'));
     }
 
     /**
-     * Elimina una cita por su identificador.     
+     * Elimina una cita por su identificador.
      *
      * @param  int  $id
      * @return \Illuminate\Contracts\View\View
@@ -100,7 +99,7 @@ class CitaController extends Controller
      */
     public function borrarCitaPropia()
     {
-        $cita = Cita::where('user_id', Auth::id())->first(); 
+        $cita = Cita::where('user_id', Auth::id())->first();
 
         if ($cita) {
             $eliminado = $cita->delete();
@@ -108,6 +107,7 @@ class CitaController extends Controller
                 return view('errores.exito', ['mensaje' => "Su cita con ID {$cita->id} eliminada con exito"]);
             }
         }
+
         return view('errores.error', ['mensaje' => "No se ha podido eliminar su cita {$cita->id}"]);
     }
 
@@ -127,7 +127,7 @@ class CitaController extends Controller
         return view('administracion.formularios.formeditarcita', [
             'cita' => $cita,
             'estados' => $estados,
-            'turnos' => $turnos
+            'turnos' => $turnos,
         ]);
     }
 
@@ -138,7 +138,6 @@ class CitaController extends Controller
      * petición. Se espera una petición de tipo PUT/POST; las GET devuelven
      * una vista de error.
      *
-     * @param  \Illuminate\Http\Request  $peticion
      * @param  int  $id
      * @return \Illuminate\Contracts\View\View
      */
@@ -148,15 +147,15 @@ class CitaController extends Controller
         if ($peticion->isMethod('get')) {
             return view('errores.error', ['mensaje' => 'Acceso denegado Vuelva a la página anterior y utiliza el formulario de búsqueda.']);
         }
-        
+
         $cita = Cita::findOrFail($id);
 
         // Validar datos del formulario
         $datosValidados = $peticion->validate([
             'email_usuario' => 'nullable|email|exists:users,email',
-            'turno' => 'nullable|in:' . implode(',', TurnoCita::values()),
+            'turno' => 'nullable|in:'.implode(',', TurnoCita::values()),
             'fecha_cita' => 'nullable|date',
-            'estado_cita' => 'nullable|in:' . implode(',', EstadoCita::values()),
+            'estado_cita' => 'nullable|in:'.implode(',', EstadoCita::values()),
         ], [
             'email_usuario.email' => 'El campo email debe ser una dirección de correo válida.',
             'email_usuario.exists' => 'No existe ningún usuario con ese email.',
@@ -186,17 +185,16 @@ class CitaController extends Controller
         }
 
         // Guardar los cambios. Los errores de integridad referencial (por ejemplo, fecha/turno ya ocupados) se capturan
-        //y se muestra con un mensaje propio en lugar del global de error de base de datos.
-    try{    
-        $guardado = $cita->save();
+        // y se muestra con un mensaje propio en lugar del global de error de base de datos.
+        try {
+            $guardado = $cita->save();
 
-        if ($guardado) {
-            return view('errores.exito', ['mensaje' => "Cita con ID {$id} correctamente modificada"]);
-        }
-        else {
-            return view('errores.error', ['mensaje' => "No se ha podido modificar la cita con ID {$id}"]);
-        }
-    } catch (QueryException $e) {       
+            if ($guardado) {
+                return view('errores.exito', ['mensaje' => "Cita con ID {$id} correctamente modificada"]);
+            } else {
+                return view('errores.error', ['mensaje' => "No se ha podido modificar la cita con ID {$id}"]);
+            }
+        } catch (QueryException $e) {
             return view('errores.error', ['mensaje' => 'Error en la modificación de datos. Puede que la fecha y turno ya estén ocupados por otra cita o que el usuario ya tenga una cita.']);
         }
     }
